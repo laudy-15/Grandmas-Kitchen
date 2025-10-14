@@ -19,26 +19,22 @@ public class Scanner {
         keywords = new HashMap<>();
         keywords.put("and", AND);
         keywords.put("to", TO);
-        keywords.put("grab", GRAB);
-        keywords.put("put", PUT);
-        keywords.put("onto", ONTO); // print
-        keywords.put("for", FOR);
-        keywords.put("using", USING);
-        keywords.put("serve", SERVE); //return
+        keywords.put("grab", VAR);
+        keywords.put("put", PRINT);
+        keywords.put("serve", RETURN); //return
         keywords.put("if", IF);
         keywords.put("else", ELSE);
-        keywords.put("recipe", RECIPE); //function
+        keywords.put("recipe", FUN); //function
         keywords.put("true", TRUE);
         keywords.put("false", FALSE);
 
+
         keywords.put("nil", NIL);
+        keywords.put("class", CLASS);
         keywords.put("or", OR);
         keywords.put("super", SUPER);
         keywords.put("this", THIS);
-        
-        keywords.put("var", VAR);
         keywords.put("while", WHILE);
-        keywords.put("break", BREAK);
     }
 
     Scanner(String source) {
