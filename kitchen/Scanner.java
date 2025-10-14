@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static lox.TokenType.*;
+import static kitchen.TokenType.*;
 
 public class Scanner {
     private final String source;
@@ -18,19 +18,24 @@ public class Scanner {
     static {
         keywords = new HashMap<>();
         keywords.put("and", AND);
-        keywords.put("class", CLASS);
-        keywords.put("else", ELSE);
-        keywords.put("false", FALSE);
+        keywords.put("to", TO);
+        keywords.put("grab", GRAB);
+        keywords.put("put", PUT);
+        keywords.put("onto", ONTO); // print
         keywords.put("for", FOR);
-        keywords.put("fun", FUN);
+        keywords.put("using", USING);
+        keywords.put("serve", SERVE); //return
         keywords.put("if", IF);
+        keywords.put("else", ELSE);
+        keywords.put("recipe", RECIPE); //function
+        keywords.put("true", TRUE);
+        keywords.put("false", FALSE);
+
         keywords.put("nil", NIL);
         keywords.put("or", OR);
-        keywords.put("print", PRINT);
-        keywords.put("return", RETURN);
         keywords.put("super", SUPER);
         keywords.put("this", THIS);
-        keywords.put("true", TRUE);
+        
         keywords.put("var", VAR);
         keywords.put("while", WHILE);
         keywords.put("break", BREAK);
@@ -59,21 +64,18 @@ public class Scanner {
             case '}' -> addToken(RIGHT_BRACE);
             case ',' -> addToken(COMMA);
             case '.' -> addToken(DOT);
-            case '-' -> addToken(MINUS);
-            case '+' -> addToken(PLUS);
-            case ';' -> addToken(SEMICOLON);
-            case '*' -> addToken(STAR);
 
+            case '-' -> addToken(match('>') ? ARROW_DASH : ARROW_HEAD);
             case '!' -> addToken(match('=') ? BANG_EQUAL : BANG);
             case '=' -> addToken(match('=') ? EQUAL_EQUAL : EQUAL);
             case '<' -> addToken(match('=') ? LESS_EQUAL : LESS);
             case '>' -> addToken(match('=') ? GREATER_EQUAL : GREATER);
-            case '/' -> {
-                if (match('/')) {
+            case '~' -> {
+                if (match('~')) {
                     // A comment goes until the end of the line.
                     while (peek() != '\n' && !isAtEnd()) advance();
                 } else {
-                    addToken(SLASH);
+                    addToken(TILDE);
                 }
             }
 
