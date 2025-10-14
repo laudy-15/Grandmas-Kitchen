@@ -20,7 +20,7 @@ public class Scanner {
         keywords.put("and", AND);
         keywords.put("to", TO);
         keywords.put("grab", VAR);
-        keywords.put("put", PRINT);
+        keywords.put("put", PRINT); //print
         keywords.put("serve", RETURN); //return
         keywords.put("if", IF);
         keywords.put("else", ELSE);
@@ -28,7 +28,7 @@ public class Scanner {
         keywords.put("true", TRUE);
         keywords.put("false", FALSE);
 
-
+        // tokens, they do not have a Grandma's kitchen version for
         keywords.put("nil", NIL);
         keywords.put("class", CLASS);
         keywords.put("or", OR);
