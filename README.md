@@ -35,7 +35,7 @@ loopStmt        → "while" IDENTIFIER expression statement ;
 ifStmt → "if" "(" expression ")" statement
                ( "else" statement )? ;
 
-printtStmt      → "plate" expression “.” ;
+printtStmt      → "put" expression “.” ;
 actionStmt      → action IDENTIFIER;
 action          → "beat"
         	        | "mix"
@@ -52,14 +52,22 @@ block → "{" recipeLine* "}" ;
 ## Sample Programs
 ### Program 1: "Hello, world"
 ```
-plate “cookies”.
+put “cookies”.
 ```
 
 ### Program 2: While Loop
 ```
-add 5 eggs to mixing bowl        
-while mixing bowl contains eggs
-	beat egg ~beat is some operation~
-	plate egg 
-	remove egg from mixing bowl
+grab "egg1". ~var declaration~
+grab "egg2".
+grab "egg3".
+grab "egg4".
+grab "egg5".
+grab bowl. ~list~
+
+bowl -> {egg1, egg2, egg3, egg4, egg5}.
+
+while 
+    grab "curEgg" -> remove egg from bowl
+	beat curEgg ~some operation~
+	put curEgg ~print~
 ```
