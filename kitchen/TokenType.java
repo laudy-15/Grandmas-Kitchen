@@ -3,10 +3,11 @@ package kitchen;
 enum TokenType {
     // Single-character tokens.
     LEFT_PAREN, RIGHT_PAREN, LEFT_BRACE, RIGHT_BRACE,
-    COMMA, DOT, TILDE,
+    COMMA, DOT, MINUS, PLUS, SEMICOLON, SLASH, STAR,
+    TILDE,
 
     // One or two character tokens.
-    ARROW_DASH, ARROW_HEAD, BANG, BANG_EQUAL,
+    BANG, BANG_EQUAL,
     EQUAL, EQUAL_EQUAL,
     GREATER, GREATER_EQUAL,
     LESS, LESS_EQUAL,
@@ -15,10 +16,15 @@ enum TokenType {
     IDENTIFIER, STRING, NUMBER,
 
     // Keywords.
-    AND, TO, GRAB, PUT, RETURN, IF,
-    ELSE, FUN, TRUE, FALSE, NIL, CLASS,  OR, PRINT,
-    SUPER, THIS, VAR, WHILE,
+    AND, CLASS, ELSE, FALSE, FUN,
+    FOR, IF, THEN, NIL, OR, PRINT,
+    RETURN, SUPER, THIS, TRUE,
+    VAR, WHILE, INTO, UNTIL, CONTINUE,
+    GRAB, ADD, POUR, IS, TOP, OF, REST,
+    EMPTY, NOT,
 
+    // CHAPTER 9 CHALLENGE
+    BREAK,
 
     EOF
 }

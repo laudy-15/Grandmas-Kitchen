@@ -18,23 +18,43 @@ public class Scanner {
     static {
         keywords = new HashMap<>();
         keywords.put("and", AND);
-        keywords.put("to", TO);
-        keywords.put("grab", VAR);
-        keywords.put("put", PRINT); //print
-        keywords.put("serve", RETURN); //return
-        keywords.put("if", IF);
-        keywords.put("else", ELSE);
-        keywords.put("recipe", FUN); //function
-        keywords.put("true", TRUE);
-        keywords.put("false", FALSE);
-
-        // tokens, they do not have a Grandma's kitchen version for
-        keywords.put("nil", NIL);
         keywords.put("class", CLASS);
+        keywords.put("then", THEN);
+        keywords.put("otherwise", ELSE);
+        keywords.put("continue", CONTINUE);
+        keywords.put("grab", GRAB);
+        keywords.put("add", ADD);
+        keywords.put("pour", POUR);
+        keywords.put("top", TOP);
+        keywords.put("of", OF);
+        keywords.put("rest", REST);
+        keywords.put("empty", EMPTY);
+        keywords.put("not", NOT);
+        keywords.put("into", INTO);
+        keywords.put("until", UNTIL);
+        keywords.put("false", FALSE);
+        keywords.put("for", FOR);
+        keywords.put("recipe", FUN);
+        keywords.put("if", IF);
+        keywords.put("nil", NIL);
         keywords.put("or", OR);
+        keywords.put("plate", PRINT);
+        keywords.put("serve", RETURN);
         keywords.put("super", SUPER);
         keywords.put("this", THIS);
+        keywords.put("true", TRUE);
+        keywords.put("var", VAR);
+        keywords.put("is", IS); //equality
         keywords.put("while", WHILE);
+        keywords.put("break", BREAK);
+
+        // Containers (IDENTIFIER)
+        for (String c : List.of("pot", "bowl", "plate", "pan", "cup", "saucer", "sheet"))
+            keywords.put(c, TokenType.IDENTIFIER);
+
+        // Ingredients (also identifiers)
+        for (String i : List.of("eggs", "flour", "sugar", "milk"))
+            keywords.put(i, TokenType.IDENTIFIER);
     }
 
     Scanner(String source) {
@@ -61,7 +81,6 @@ public class Scanner {
             case ',' -> addToken(COMMA);
             case '.' -> addToken(DOT);
 
-            case '-' -> addToken(match('>') ? ARROW_DASH : ARROW_HEAD);
             case '!' -> addToken(match('=') ? BANG_EQUAL : BANG);
             case '=' -> addToken(match('=') ? EQUAL_EQUAL : EQUAL);
             case '<' -> addToken(match('=') ? LESS_EQUAL : LESS);
@@ -86,7 +105,7 @@ public class Scanner {
                 } else if (isAlpha(c)) {
                     identifier();
                 } else {
-                    Lox.error(line, "Unexpected character.");
+                    Kitchen.error(line, "Unexpected character.");
                 }
             }
         }
@@ -123,7 +142,7 @@ public class Scanner {
         }
 
         if (isAtEnd()) {
-            Lox.error(line, "Unterminated string.");
+            Kitchen.error(line, "Unterminated string.");
             return;
         }
 
