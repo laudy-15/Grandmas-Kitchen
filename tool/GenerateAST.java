@@ -20,6 +20,7 @@ public class GenerateAST {
                 "with       :",
                 "is         :",
                 "count      :"
+                // "top" and "rest of" "recipe" "for" "using" would be keywords
                 // "Assign   : Token name, Expr value",
                 // "Binary   : Expr left, Token operator, Expr right",
                 // "Call     : Expr callee, Token paren, List<Expr> arguments",
