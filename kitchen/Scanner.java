@@ -49,12 +49,12 @@ public class Scanner {
         keywords.put("break", BREAK);
 
         // Containers (IDENTIFIER)
-        for (String c : List.of("pot", "bowl", "plate", "pan", "cup", "saucer", "sheet"))
-            keywords.put(c, TokenType.IDENTIFIER);
+        //for (String c : List.of("pot", "bowl", "pan", "cup", "saucer", "sheet"))
+        //    keywords.put(c, TokenType.IDENTIFIER);
 
         // Ingredients (also identifiers)
-        for (String i : List.of("eggs", "flour", "sugar", "milk"))
-            keywords.put(i, TokenType.IDENTIFIER);
+        //for (String i : List.of("eggs", "flour", "sugar", "milk"))
+        //    keywords.put(i, TokenType.IDENTIFIER);
     }
 
     Scanner(String source) {
@@ -117,6 +117,7 @@ public class Scanner {
         // See if the identifier is a reserved word.
         String text = source.substring(start, current);
         TokenType type = keywords.get(text);
+        //System.out.println("Looking up: " + text + " got " + type);
         if (type == null) type = IDENTIFIER;
         addToken(type);
     }

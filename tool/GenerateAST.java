@@ -12,14 +12,16 @@ public class GenerateAST {
         //     System.exit(64);
         // }
         // String outputDir = args[0];
-        String outputDir = "c:\\\\Users\\\\savan\\\\OneDrive\\\\Desktop\\\\csc\\\\csc 404\\\\Grandmas-Kitchen\\\\kitchen";
+        String outputDir = ".\\kitchen\\";
 
         defineAst(outputDir, "Expr", Arrays.asList(
-                "first      : Token",
-                "rest       :",
-                "with       :",
-                "is         :",
-                "count      :"
+                "Ingredient : Token tok",
+                "Quantity : double amount, Token unit, Expr ingr"
+        //         "first      : Token",
+        //         "rest       :",
+        //         "with       :",
+        //         "is         :",
+        //         "count      :"
                 // "top" and "rest of" "recipe" "for" "using" would be keywords
                 // "Assign   : Token name, Expr value",
                 // "Binary   : Expr left, Token operator, Expr right",
@@ -33,14 +35,15 @@ public class GenerateAST {
                 // "This     : Token keyword",
                 // "Unary    : Token operator, Expr right",
                 // "Variable : Token name"
-        ));
+     ));
 
         defineAst(outputDir, "Stmt", Arrays.asList(
-                "Define     : Token keyword, ",
+                "Define     : Token keyword",
                 "Declare    : Token keyword, Expr object, Token Identifier",
                 "If         : Expr condition, Stmt thenBranch, Stmt elseBranch",
                 "While      : Expr condition, Stmt body",
-                "Return     : Token keyword, Expr value"
+                "Return     : Expr value",
+                "Print      : Expr value"
 
                 // "Block     : List<Stmt> statements",
                 // "Class      : Token name, Expr.Variable superclass," +

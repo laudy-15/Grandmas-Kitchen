@@ -129,9 +129,12 @@ stmt -> grab <container>.
       | [add|combine|pour] <expr> into <container>.
       | if <expr> then [stmt]+ [otherwise [stmt]+] and continue.
       | repeat [stmt]+ until <expr>.
+      | plate <expr>.
       | serve <expr>.                 ~~~~~~~ return statement
 
-expr -> <ingredient> | <container> | top of <container>
+expr -> <ingredient> 
+       | <container>
+       | top of <container>
        | rest of <container> | <expr> with <expr> 
        | <container> is [not] empty
        | <name> [with <expr>+]?  

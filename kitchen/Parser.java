@@ -3,6 +3,9 @@ package kitchen;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import kitchen.Expr.*;
+import kitchen.Stmt.*;
 import static kitchen.TokenType.*;
 
 public class Parser {
@@ -23,9 +26,37 @@ public class Parser {
         return statements;
     }
 
-    private Expr expression() {
-        return first();
+    private Stmt statement() {
+        if (match(RETURN)) return returnStatement();
+        if (match(PRINT)) return printStatement();
+
+        if (match(GRAB)) return varDeclaration();
+        if (match (ADD) || match(OR) || match(POUR)) return varAssignment();
+        if (match(IF)) return ifStatement();
+        if (match(WHILE)) return whileStatement();
+        return expressionStatement();
     }
+
+    private Expr expression() {
+
+        if (check(TokenType.NUMBER)) {
+            Token tok = advance();   // the number
+            Token units = consume(IDENTIFIER, "expected units");
+            consume(OF, "expected `of` after quantity");
+            Ingredient ingr = ingredient();
+            return new Quantity((Double)tok.literal, units, ingr);
+        }
+        return null;
+    }
+
+    private Ingredient ingredient() {
+        Token tok = consume(IDENTIFIER, "expected ingredient");
+        
+        // TODO: check that it's a valid ingredient  ??? are they user-decided or fixed by the language ???
+        return new Expr.Ingredient(tok);
+    }
+
+
 
     private Stmt declaration() {
         try {
@@ -37,20 +68,12 @@ public class Parser {
         }
     }
 
-    private Stmt statement() {
-        if (match(GRAB)) return varDeclaration();
-        if (match (ADD) || match(OR) || match(POUR)) return varAssignment();
-        if (match(IF)) return ifStatement();
-        if (match(WHILE)) return whileStatement();
-        if (match(PRINT)) return printStatement();
-        return expressionStatement();
-    }
 
     private Stmt varDeclaration() {
         Token name = consume(IDENTIFIER, "Expect container name.");
 
         consume(DOT, "Expect '.' after variable definition.");
-        return new Stmt.Var(name, null);
+        return null; // new Stmt.Var(name, null);
     }
 
     private Stmt varAssignment() {
@@ -58,7 +81,7 @@ public class Parser {
         consume(INTO, "Expect a variable to declare.");
         Token name = consume(IDENTIFIER, "Expect container name.");
         consume(DOT, "Expect '.' after variable declaration.");
-        return new Stmt.Var(name, initializer);
+        return null; //new Stmt.Var(name, initializer);
     }
 
     private Stmt ifStatement() {
@@ -87,6 +110,12 @@ public class Parser {
         return new Stmt.While(condition, body);
     }
 
+    private Stmt returnStatement() {
+        Expr value = expression();
+        consume(DOT, "Expect '.' after value.");
+        return new Stmt.Return(value);
+    }
+
     private Stmt printStatement() {
         Expr value = expression();
         consume(DOT, "Expect '.' after value.");
@@ -96,55 +125,55 @@ public class Parser {
     private Stmt expressionStatement() {
         Expr expr = expression();
         consume(DOT, "Expect '.' after expression.");
-        return new Stmt.Expression(expr);
+        return null; //new Stmt.Expression(expr);
     }
 
     // "top of <container>"
-    private Expr first() {
-        Expr expr = rest();
-        consume(OF, "Expect 'of' after 'top'.");
-        Token container = consume(IDENTIFIER, "Expect a container after 'top of'.");
+    // private Expr first() {
+    //     Expr expr = rest();
+    //     consume(OF, "Expect 'of' after 'top'.");
+    //     Token container = consume(IDENTIFIER, "Expect a container after 'top of'.");
 
-        expr = Expr.Property(TOP, container);
+    //     //expr = Expr.Property(TOP, container);
 
-        return expr;
-    }
+    //     return expr;
+    // }
 
-    // "rest of <container>"
-    private Expr rest() {
-        Expr expr = comparison();
-        consume(OF, "Expect 'of' after 'rest'.");
-        Token container = consume(IDENTIFIER, "Expect a container after 'rest of'.");
+    // // "rest of <container>"
+    // private Expr rest() {
+    //     Expr expr = comparison();
+    //     consume(OF, "Expect 'of' after 'rest'.");
+    //     Token container = consume(IDENTIFIER, "Expect a container after 'rest of'.");
 
-        expr = Expr.Property(REST, container);
+    //     //expr = Expr.Property(REST, container);
 
-        return expr;
-    }
+    //     return expr;
+    // }
 
-    // <container> is [not] empty
-    private Expr comparison() {
-        Expr expr = count();
+    // // <container> is [not] empty
+    // private Expr comparison() {
+    //     //Expr expr = count();
 
-        Token container = previous();
-        Token operator = advance();
-        Token not = null;
+    //     Token container = previous();
+    //     Token operator = advance();
+    //     Token not = null;
 
-        if (match(NOT)) {
-            not = previous();
-        }
+    //     if (match(NOT)) {
+    //         not = previous();
+    //     }
 
-        consume(EMPTY, "Expect an 'empty'.");
-        expr = Expr.Binary(container, operator, new Token(EMPTY, "empty", null, container.line));
+    //     //consume(EMPTY, "Expect an 'empty'.");
+    //     //expr = Expr.Binary(container, operator, new Token(EMPTY, "empty", null, container.line));
 
-        //while (match(IS)) {
-        //     Token operator = previous();
-        //     Expr right = term();
-        //     expr = new Expr.Binary(expr, operator, right);
-        // }
-        return expr;
+    //     //while (match(IS)) {
+    //     //     Token operator = previous();
+    //     //     Expr right = term();
+    //     //     expr = new Expr.Binary(expr, operator, right);
+    //     // }
+    //     return null; //expr;
 
 
-    }
+    // }
 
 
 
