@@ -17,26 +17,9 @@ public class GenerateAST {
         defineAst(outputDir, "Expr", Arrays.asList(
                 "Ingredient : Token tok",
                 "Container  : Token tok",
-                "Quantity : double amount, Token unit, Expr ingr"
-        //         "first      : Token",
-        //         "rest       :",
-        //         "with       :",
-        //         "is         :",
-        //         "count      :"
-                // "top" and "rest of" "recipe" "for" "using" would be keywords
-                // "Assign   : Token name, Expr value",
-                // "Binary   : Expr left, Token operator, Expr right",
-                // "Call     : Expr callee, Token paren, List<Expr> arguments",
-                // "Get      : Expr object, Token name",
-                // "Grouping : Expr expression",
-                // "Literal  : Object value",
-                // "Logical  : Expr left, Token operator, Expr right",
-                // "Set      : Expr object, Token name, Expr value",
-                // "Super    : Token keyword, Token method",
-                // "This     : Token keyword",
-                // "Unary    : Token operator, Expr right",
-                // "Variable : Token name"
-     ));
+                "Empty      : Expr cont, boolean not",
+                "Quantity   : double amount, Token unit, Expr ingr"
+        ));
 
         defineAst(outputDir, "Stmt", Arrays.asList(
                 "Define     : Token keyword",
@@ -46,18 +29,6 @@ public class GenerateAST {
                 "Return     : Expr value",
                 "Print      : Expr value"
 
-                // "Block     : List<Stmt> statements",
-                // "Class      : Token name, Expr.Variable superclass," +
-                //             " List<Stmt.Function> methods",
-                // "Expression : Expr expression",
-                // "Function   : Token name, List<Token> params," +
-                //             " List<Stmt> body",
-                // "If         : Expr condition, Stmt thenBranch, Stmt elseBranch",
-                // "Print      : Expr expression",
-                // "Return     : Token keyword, Expr value",
-                // "While      : Expr condition, Stmt body",
-                // "Var        : Token name, Expr initializer",
-                // "Break      :"
         ));
     }
 

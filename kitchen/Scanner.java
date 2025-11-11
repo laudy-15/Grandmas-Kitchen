@@ -29,6 +29,7 @@ public class Scanner {
         keywords.put("of", OF);
         keywords.put("rest", REST);
         keywords.put("empty", EMPTY);
+        keywords.put("with", WITH);
         keywords.put("not", NOT);
         keywords.put("into", INTO);
         keywords.put("until", UNTIL);

@@ -38,6 +38,7 @@ public class Parser {
 
     private Expr expression() {
 
+        // <num> [cups|spoons|..] of <ingredient> 
         if (check(TokenType.NUMBER)) {
             Token tok = advance();   // the number
             Token units = consume(IDENTIFIER, "expected units");
@@ -46,13 +47,48 @@ public class Parser {
             return new Quantity((Double)tok.literal, units, ingr);
         }
 
-        if (check(TokenType.STRING)) {
-            
+        // top of <container>
+        if (check(TokenType.TOP)) {
+            Token tok = advance(); // string 'top'
+            System.out.println("Printing the lexeme of the given token: " + tok.lexeme);
+            consume(OF, "expected `of` after 'top'");
+            Container cont = container();
+            return cont;
         }
+
+        // rest of <container>
+        if (check(TokenType.REST)) {
+            Token tok = advance(); // string 'rest'
+            System.out.println("Printing the lexeme of the given token: " + tok.lexeme);
+            consume(OF, "expected `of` after 'rest'");
+            Container cont = container();
+            return cont;
+        }
+
+        // <expr> with <expr>
+        if (check(TokenType.WITH)) {
+            // TO-DO get the previous expression??
+        }
+
+        // <container> is [not] empty
+        if (check(TokenType.IDENTIFIER)) {
+            Container cont = container();
+            consume(IS, "expected 'is' after container.");
+            boolean not = false; //false as a baseline
+            if (check(TokenType.NOT)) {
+                consume(NOT, "'not' expected after container");
+                not = true;
+            }
+            consume(EMPTY, "expected 'empty' after container");
+            return new Expr.Empty(cont, not);
+        }
+
+        // <name> [with <expr>+]?
 
         return null;
     }
 
+    // <ingredient>
     private Ingredient ingredient() {
         Token tok = consume(IDENTIFIER, "expected ingredient");
         
@@ -60,6 +96,7 @@ public class Parser {
         return new Expr.Ingredient(tok);
     }
 
+    // <container>
     private Container container() {
         Token tok = consume(IDENTIFIER, "expected container");
 

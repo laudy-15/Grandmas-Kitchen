@@ -6,7 +6,7 @@ public class Kitchen {
     static boolean hadError = false;
 
     public static void main(String[] args) {
-        List<Token> toks = new Scanner("plate 2 cups of flour.").scanTokens();
+        List<Token> toks = new Scanner("pot is empty.").scanTokens();
         System.out.println(toks);
         Parser parser = new Parser(toks);
         List<Stmt> statements = parser.parse();
