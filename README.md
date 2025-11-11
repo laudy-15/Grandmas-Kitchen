@@ -10,69 +10,27 @@ Description: Grandma’s Kitchen is a general purpose programming language where
 
 ## Grammar
 ```
-program         → recipeLine* EOF ;
+recipe -> recipe for <name> [using <ingredients>+]? . [stmt]+
 
-recipeLine      → comment
-             	   | varDecl
-             	   | statement ;
+stmt -> grab <container>.
+      | [add|combine|pour] <expr> into <container>.
+      | if <expr> then [stmt]+ [otherwise [stmt]+] and continue.
+      | repeat [stmt]+ until <expr>.
+      | plate <expr>.  ~~print statement
+      | serve <expr>.  ~~return statement
 
-comment         → "~" .* "~" ;
-
-varDecl         → "grab" IDENTIFIER (“->“ expression)? "." ;  
-
-expression     → assignment ;
-assignment     → IDENTIFIER "->" assignment ;
-
-statement       → actionStmt
-              	  | loopStmt
-              	  | ifStmt
-              	  | printStmt 
-		  | returnStmt
-		  | block;
-
-loopStmt        → "while" IDENTIFIER expression statement ;
-
-ifStmt → "if" "(" expression ")" statement
-               ( "else" statement )? ;
-
-printtStmt      → "put" expression “.” ;
-actionStmt      → action IDENTIFIER;
-action          → "beat"
-        	        | "mix"
-          	        | "bake"
-                    | "chop"
-                    | "fold"
-                    | "whisk"
-                    | "stir" ;
-returnStmt → "serve" expression? "." ;
-
-block → "{" recipeLine* "}" ;
+expr -> <ingredient> 
+       | <container>
+       | top of <container>
+       | rest of <container> 
+       | <expr> with <expr> 
+       | <container> is [not] empty
+       | <name> [with <expr>+]?  
+       | <num> [cups|spoons|..] of <ingredient>
 ```
 
 ## Sample Programs
-### Program 1: "Hello, world"
 ```
-put “cookies”.
-```
-
-### Program 2: While Loop
-```
-grab "egg1". ~var declaration~
-grab "egg2".
-grab "egg3".
-grab "egg4".
-grab "egg5".
-grab bowl. ~list~
-
-bowl -> {egg1, egg2, egg3, egg4, egg5}.
-
-repeat 5 times:
-    grab "curEgg" -> remove egg from bowl
-	beat curEgg ~some operation~
-	put curEgg ~print~
-
-
-
 grab pot.   ~~~~    pot = []
 add eggs to pot.     ~~~~~ pot = cons eggs pot
 combine eggs with pot into bowl.   ~~~~   bowl = cons eggs pot
@@ -100,7 +58,6 @@ until weight of bowl > weight of plate.
 
 for each <thing> in the bowl:
     add <thing> to pot
-```
 
 
 recipe for fib using eggs:
@@ -121,6 +78,15 @@ serve fib with pot.
 
 
 fib(N) = if n == 0 or 1 return n, else return fib(n-1) + fib(n-2)
+```
+
+## Workspace:
+
+containers  -> pot | bowl | pan | cup | saucer | sheet | ...
+ingredients  -> eggs | flour | sugar | milk | ....
+
+utensils ~~~~ lists
+ingredients ~~~~~ constants
 
 
 recipe -> recipe for <name> [using <ingredients>+]? . [stmt]+
@@ -129,8 +95,8 @@ stmt -> grab <container>.
       | [add|combine|pour] <expr> into <container>.
       | if <expr> then [stmt]+ [otherwise [stmt]+] and continue.
       | repeat [stmt]+ until <expr>.
-      | plate <expr>.
-      | serve <expr>.                 ~~~~~~~ return statement
+      | plate <expr>.  ~~print statement
+      | serve <expr>.  ~~return statement
 
 expr -> <ingredient> 
        | <container>
@@ -141,10 +107,4 @@ expr -> <ingredient>
        | <name> [with <expr>+]?  
        | <num> [cups|spoons|..] of <ingredient>               
 
-containers  -> pot | bowl | plate | pan | cup | saucer | sheet | ...
-ingredients  -> eggs | flour | sugar | milk | ....
 
-
-
-utensils ~~~~ lists
-ingredients ~~~~~ constants

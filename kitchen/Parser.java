@@ -36,6 +36,8 @@ public class Parser {
         return expressionStatement();
     }
 
+    /* Expression Methods: */
+
     private Expr expression() {
 
         // <num> [cups|spoons|..] of <ingredient> 
@@ -70,20 +72,26 @@ public class Parser {
             // TO-DO get the previous expression??
         }
 
-        // <container> is [not] empty
+        // <container>
         if (check(TokenType.IDENTIFIER)) {
             Container cont = container();
-            consume(IS, "expected 'is' after container.");
-            boolean not = false; //false as a baseline
-            if (check(TokenType.NOT)) {
-                consume(NOT, "'not' expected after container");
-                not = true;
+
+            // <container> is [not] empty
+            if (check(TokenType.IS)) {
+                consume(IS, "expected 'is' after container.");
+                boolean not = false; //false as a baseline
+                if (check(TokenType.NOT)) {
+                    consume(NOT, "'not' expected after container");
+                    not = true;
+                }
+                consume(EMPTY, "expected 'empty' after container");
+                return new Expr.Empty(cont, not);
             }
-            consume(EMPTY, "expected 'empty' after container");
-            return new Expr.Empty(cont, not);
+
+            return cont; 
         }
 
-        // <name> [with <expr>+]?
+        // <name> [with <expr>+]? -- function calls 
 
         return null;
     }
@@ -105,6 +113,7 @@ public class Parser {
     }
 
 
+    /* Statement Methods: */
 
     private Stmt declaration() {
         try {
@@ -175,163 +184,6 @@ public class Parser {
         consume(DOT, "Expect '.' after expression.");
         return null; //new Stmt.Expression(expr);
     }
-
-    // "top of <container>"
-    // private Expr first() {
-    //     Expr expr = rest();
-    //     consume(OF, "Expect 'of' after 'top'.");
-    //     Token container = consume(IDENTIFIER, "Expect a container after 'top of'.");
-
-    //     //expr = Expr.Property(TOP, container);
-
-    //     return expr;
-    // }
-
-    // // "rest of <container>"
-    // private Expr rest() {
-    //     Expr expr = comparison();
-    //     consume(OF, "Expect 'of' after 'rest'.");
-    //     Token container = consume(IDENTIFIER, "Expect a container after 'rest of'.");
-
-    //     //expr = Expr.Property(REST, container);
-
-    //     return expr;
-    // }
-
-    // // <container> is [not] empty
-    // private Expr comparison() {
-    //     //Expr expr = count();
-
-    //     Token container = previous();
-    //     Token operator = advance();
-    //     Token not = null;
-
-    //     if (match(NOT)) {
-    //         not = previous();
-    //     }
-
-    //     //consume(EMPTY, "Expect an 'empty'.");
-    //     //expr = Expr.Binary(container, operator, new Token(EMPTY, "empty", null, container.line));
-
-    //     //while (match(IS)) {
-    //     //     Token operator = previous();
-    //     //     Expr right = term();
-    //     //     expr = new Expr.Binary(expr, operator, right);
-    //     // }
-    //     return null; //expr;
-
-
-    // }
-
-
-
-    // private Expr assignment() {
-    //     Expr expr = or();
-
-    //     if (match(EQUAL)) {
-    //         Token equals = previous(); // for error reporting
-    //         Expr value = assignment();
-
-    //         if (expr instanceof Expr.Variable) {
-    //             Token name = ((Expr.Variable) expr).name;
-    //             return new Expr.Assign(name, value);
-    //         }
-    //         error(equals, "Invalid assignment target.");
-    //     }
-
-    //     return expr;
-    // }
-
-    // private Expr or() {
-    //     Expr expr = and();
-
-    //     while (match(OR)) {
-    //         Token operator = previous();
-    //         Expr right = and();
-    //         expr = new Expr.Logical(expr, operator, right);
-    //     }
-
-    //     return expr;
-    // }
-
-    // private Expr and() {
-    //     Expr expr = equality();
-
-    //     while (match(AND)) {
-    //         Token operator = previous();
-    //         Expr right = equality();
-    //         expr = new Expr.Logical(expr, operator, right);
-    //     }
-    //     return expr;
-    // }
-
-
-
-    // private Expr comparison() {
-    //     Expr expr = term();
-
-    //     while (match(GREATER, GREATER_EQUAL, LESS, LESS_EQUAL)) {
-    //         Token operator = previous();
-    //         Expr right = term();
-    //         expr = new Expr.Binary(expr, operator, right);
-    //     }
-    //     return expr;
-    // }
-
-    // private Expr term() {
-    //     Expr expr = factor();
-
-    //     while (match(MINUS, PLUS)) {
-    //         Token operator = previous();
-    //         Expr right = factor();
-    //         expr = new Expr.Binary(expr, operator, right);
-    //     }
-    //     return expr;
-    // }
-
-    // private Expr factor() {
-    //     Expr expr = unary();
-
-    //     while (match(SLASH, STAR)) {
-    //         Token operator = previous();
-    //         Expr right = unary();
-    //         expr = new Expr.Binary(expr, operator, right);
-    //     }
-    //     return expr;
-    // }
-
-    // private Expr unary() {
-    //     if (match(BANG, MINUS)) {
-    //         Token operator = previous();
-    //         Expr right = unary();
-    //         return new Expr.Unary(operator, right);
-    //     }
-    //     return primary();
-    // }
-
-    // private Expr primary() {
-    //     if (match(FALSE)) return new Expr.Literal(false);
-    //     if (match(TRUE)) return new Expr.Literal(true);
-    //     if (match(NIL)) return new Expr.Literal(null);
-
-    //     if (match(NUMBER, STRING)) {
-    //         return new Expr.Literal(previous().literal);
-    //     }
-
-    //     if (match(IDENTIFIER)) {
-    //         return new Expr.Variable(previous());
-    //     }
-
-    //     if (match(LEFT_PAREN)) {
-    //         Expr expr = expression();
-    //         consume(RIGHT_PAREN, "Expect ')' after expression.");
-    //         return new Expr.Grouping(expr);
-    //     }
-
-    //     throw error(peek(), "Expect expression.");
-    // }
-
-
 
 
     /* General parsing utility methods */
