@@ -10,6 +10,7 @@ abstract class Expr {
     R visitIngredientExpr(Ingredient expr);
     R visitContainerExpr(Container expr);
     R visitTopExpr(Top expr);
+    R visitRestExpr(Rest expr);
     R visitEmptyExpr(Empty expr);
     R visitQuantityExpr(Quantity expr);
   }
@@ -62,6 +63,23 @@ abstract class Expr {
     @Override
     public String toString() {
       return "Top(" + cont + ")";
+    }
+  }
+  static class Rest extends Expr {
+    Rest(Expr cont) {
+      this.cont = cont;
+    }
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+      return visitor.visitRestExpr(this);
+    }
+
+    final Expr cont;
+
+    @Override
+    public String toString() {
+      return "Rest(" + cont + ")";
     }
   }
   static class Empty extends Expr {

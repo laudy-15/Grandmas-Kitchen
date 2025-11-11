@@ -58,7 +58,6 @@ public class Parser {
         // top of <container>
         if (check(TokenType.TOP)) {
             Token tok = advance(); // string 'top'
-            System.out.println("Printing the lexeme of the given token: " + tok.lexeme);
             consume(OF, "expected `of` after 'top'");
             Container cont = container();
             return new Expr.Top(cont);
@@ -67,10 +66,9 @@ public class Parser {
         // rest of <container>
         if (check(TokenType.REST)) {
             Token tok = advance(); // string 'rest'
-            System.out.println("Printing the lexeme of the given token: " + tok.lexeme);
             consume(OF, "expected `of` after 'rest'");
             Container cont = container();
-            return cont;
+            return new Expr.Rest(cont);
         }
 
         // <expr> with <expr>

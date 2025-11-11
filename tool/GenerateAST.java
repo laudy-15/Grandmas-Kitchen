@@ -18,6 +18,7 @@ public class GenerateAST {
                 "Ingredient : Token tok",
                 "Container  : Token tok",
                 "Top        : Expr cont",
+                "Rest       : Expr cont",
                 "Empty      : Expr cont, boolean not",
                 "Quantity   : double amount, Token unit, Expr ingr"
         ));
