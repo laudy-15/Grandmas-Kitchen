@@ -43,9 +43,15 @@ public class Parser {
         // <num> [cups|spoons|..] of <ingredient> 
         if (check(TokenType.NUMBER)) {
             Token tok = advance();   // the number
-            Token units = consume(IDENTIFIER, "expected units");
-            consume(OF, "expected `of` after quantity");
-            Ingredient ingr = ingredient();
+            Token units = consume(IDENTIFIER, "expected units or ingredient after number");
+            Ingredient ingr;
+            if (check(OF)) {
+                advance();    // the `OF`
+                ingr = ingredient();
+            } else {
+                ingr = new Expr.Ingredient(units);
+                units = null;
+            }
             return new Quantity((Double)tok.literal, units, ingr);
         }
 
@@ -55,7 +61,7 @@ public class Parser {
             System.out.println("Printing the lexeme of the given token: " + tok.lexeme);
             consume(OF, "expected `of` after 'top'");
             Container cont = container();
-            return cont;
+            return new Expr.Top(cont);
         }
 
         // rest of <container>
@@ -130,7 +136,7 @@ public class Parser {
         Token name = consume(IDENTIFIER, "Expect container name.");
 
         consume(DOT, "Expect '.' after variable definition.");
-        return null; // new Stmt.Var(name, null);
+        return new Stmt.Define(name);
     }
 
     private Stmt varAssignment() {
@@ -138,7 +144,7 @@ public class Parser {
         consume(INTO, "Expect a variable to declare.");
         Token name = consume(IDENTIFIER, "Expect container name.");
         consume(DOT, "Expect '.' after variable declaration.");
-        return null; //new Stmt.Var(name, initializer);
+        return new Stmt.Assign(name, initializer);
     }
 
     private Stmt ifStatement() {
