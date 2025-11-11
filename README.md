@@ -19,6 +19,8 @@ stmt -> grab <container>.
       | plate <expr>.  ~~print statement
       | serve <expr>.  ~~return statement
 
+      | mix <containeer>.    ~~~ sum up everything in container into one number in that container
+
 expr -> <ingredient> 
        | <container>
        | top of <container>
@@ -26,7 +28,7 @@ expr -> <ingredient>
        | <expr> with <expr> 
        | <container> is [not] empty
        | <name> [with <expr>+]?  
-       | <num> [cups|spoons|..] of <ingredient>
+       | <num> [cups|spoons|..]? [of]? <ingredient>
 ```
 
 ## Sample Programs
@@ -61,6 +63,7 @@ for each <thing> in the bowl:
 
 
 recipe for fib using eggs:
+   grab plate.
    if weight of eggs is 0 or weight of eggs is 1 then
     serve eggs
    otherwise
@@ -98,13 +101,18 @@ stmt -> grab <container>.
       | plate <expr>.  ~~print statement
       | serve <expr>.  ~~return statement
 
-expr -> <ingredient> 
-       | <container>
+expr -> | <var>
        | top of <container>
        | rest of <container> 
-       | <expr> with <expr> 
+       ;;;;| <expr> with <expr> 
        | <container> is [not] empty
        | <name> [with <expr>+]?  
-       | <num> [cups|spoons|..] of <ingredient>               
+       | <num> [cups|spoons|..] of <ingredient>   
+
+ var -> <ingredient> 
+       | <container>       
 
 
+1. expr with expr
+2. differentiate container and ingredient?
+   - should these be hard coded? or user-defined?
