@@ -9,6 +9,8 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class Kitchen {
+    private static final Interpreter interpreter = new Interpreter();
+
     static boolean hadError = false;
     static boolean hadRuntimeError = false;
 
@@ -65,7 +67,8 @@ public class Kitchen {
         // resolver.resolve(statements);
         // if (hadError) return;
 
-        //interpreter.interpret(statements);
+        interpreter.interpret(statements);
+        interpreter.dump();
     }
 
     // public static void main(String[] args) {
@@ -87,5 +90,10 @@ public class Kitchen {
         System.err.println(
                 "[line " + line + "] Error" + where + ": " + message);
         hadError = true;
+    }
+
+    static void runtimeError(RuntimeError error) {
+        System.err.println(error.getMessage() + "\n[Line " + error.token.line + "]");
+        hadRuntimeError = true;
     }
 }
