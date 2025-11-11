@@ -83,6 +83,27 @@ public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
     }
 
     @Override
+    public Object visitRestExpr(Rest expr) {
+        // return the rest of the container (which should be an arraylist when looked up)
+        String name = ((Container)expr.cont).tok.lexeme;
+        if (!vars.containsKey(name)) {
+            throw new RuntimeError(((Container)expr.cont).tok, "No such container '" + name + "'.");
+        }
+        Object value = vars.get(name);
+        if (!(value instanceof ArrayList)) {
+            throw new RuntimeError(((Container)expr.cont).tok, "'" + name + "' is not a container.");
+        }
+        ArrayList<Object> list = (ArrayList<Object>)value;
+        if (list.isEmpty()) {
+            throw new RuntimeError(((Container)expr.cont).tok, "'" + name + "' is empty.");
+        }
+
+        list.remove(0);
+        return list;
+    }
+
+
+    @Override
     public Void visitDefineStmt(Define stmt) {
         String name = stmt.keyword.lexeme;
         if (vars.containsKey(name)) {
