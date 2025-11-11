@@ -116,3 +116,7 @@ expr -> | <var>
 1. expr with expr
 2. differentiate container and ingredient?
    - should these be hard coded? or user-defined?
+
+
+code to run the test file:
+  & 'C:\Program Files\Eclipse Adoptium\jdk-17.0.8.7-hotspot\bin\java.exe' '-XX:+ShowCodeDetailsInExceptionMessages' '-cp' 'C:\Users\savan\AppData\Roaming\Code\User\workspaceStorage\8ae14183fc085ce81238a7e752060038\redhat.java\jdt_ws\Grandmas-Kitchen_848ff9ef\bin' 'kitchen.Kitchen'  .\demo1.kit
