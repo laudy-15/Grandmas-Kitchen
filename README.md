@@ -135,7 +135,8 @@ stmt -> grab <container>.
 expr -> <ingredient> 
        | <container>
        | top of <container>
-       | rest of <container> | <expr> with <expr> 
+       | rest of <container> 
+       | <expr> with <expr> 
        | <container> is [not] empty
        | <name> [with <expr>+]?  
        | <num> [cups|spoons|..] of <ingredient>               

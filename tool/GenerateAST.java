@@ -16,6 +16,7 @@ public class GenerateAST {
 
         defineAst(outputDir, "Expr", Arrays.asList(
                 "Ingredient : Token tok",
+                "Container  : Token tok",
                 "Quantity : double amount, Token unit, Expr ingr"
         //         "first      : Token",
         //         "rest       :",

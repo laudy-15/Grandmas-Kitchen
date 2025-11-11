@@ -8,6 +8,7 @@ import java.util.List;
 abstract class Expr {
   interface Visitor<R> {
     R visitIngredientExpr(Ingredient expr);
+    R visitContainerExpr(Container expr);
     R visitQuantityExpr(Quantity expr);
   }
   static class Ingredient extends Expr {
@@ -25,6 +26,23 @@ abstract class Expr {
     @Override
     public String toString() {
       return "Ingredient(" + tok + ")";
+    }
+  }
+  static class Container extends Expr {
+    Container(Token tok) {
+      this.tok = tok;
+    }
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+      return visitor.visitContainerExpr(this);
+    }
+
+    final Token tok;
+
+    @Override
+    public String toString() {
+      return "Container(" + tok + ")";
     }
   }
   static class Quantity extends Expr {

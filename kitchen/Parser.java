@@ -29,7 +29,6 @@ public class Parser {
     private Stmt statement() {
         if (match(RETURN)) return returnStatement();
         if (match(PRINT)) return printStatement();
-
         if (match(GRAB)) return varDeclaration();
         if (match (ADD) || match(OR) || match(POUR)) return varAssignment();
         if (match(IF)) return ifStatement();
@@ -46,6 +45,11 @@ public class Parser {
             Ingredient ingr = ingredient();
             return new Quantity((Double)tok.literal, units, ingr);
         }
+
+        if (check(TokenType.STRING)) {
+            
+        }
+
         return null;
     }
 
@@ -54,6 +58,13 @@ public class Parser {
         
         // TODO: check that it's a valid ingredient  ??? are they user-decided or fixed by the language ???
         return new Expr.Ingredient(tok);
+    }
+
+    private Container container() {
+        Token tok = consume(IDENTIFIER, "expected container");
+
+        // TODO: check that it's a valid container
+        return new Expr.Container(tok);
     }
 
 
