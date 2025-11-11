@@ -17,6 +17,7 @@ public class GenerateAST {
         defineAst(outputDir, "Expr", Arrays.asList(
                 "Ingredient : Token tok",
                 "Container  : Token tok",
+                "Top        : Expr cont",
                 "Empty      : Expr cont, boolean not",
                 "Quantity   : double amount, Token unit, Expr ingr"
         ));
@@ -26,6 +27,7 @@ public class GenerateAST {
                 "Declare    : Token keyword, Expr object, Token Identifier",
                 "If         : Expr condition, Stmt thenBranch, Stmt elseBranch",
                 "While      : Expr condition, Stmt body",
+                "Assign     : Token cont, Expr object",
                 "Return     : Expr value",
                 "Print      : Expr value"
 

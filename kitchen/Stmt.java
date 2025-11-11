@@ -11,6 +11,7 @@ abstract class Stmt {
     R visitDeclareStmt(Declare stmt);
     R visitIfStmt(If stmt);
     R visitWhileStmt(While stmt);
+    R visitAssignStmt(Assign stmt);
     R visitReturnStmt(Return stmt);
     R visitPrintStmt(Print stmt);
   }
@@ -90,6 +91,25 @@ abstract class Stmt {
     @Override
     public String toString() {
       return "While(" + condition + ", " + body + ")";
+    }
+  }
+  static class Assign extends Stmt {
+    Assign(Token cont, Expr object) {
+      this.cont = cont;
+      this.object = object;
+    }
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+      return visitor.visitAssignStmt(this);
+    }
+
+    final Token cont;
+    final Expr object;
+
+    @Override
+    public String toString() {
+      return "Assign(" + cont + ", " + object + ")";
     }
   }
   static class Return extends Stmt {
