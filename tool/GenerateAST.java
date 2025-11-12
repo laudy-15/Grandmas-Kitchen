@@ -20,7 +20,8 @@ public class GenerateAST {
                 "Top        : Expr cont",
                 "Rest       : Expr cont",
                 "Empty      : Expr cont, boolean not",
-                "Quantity   : double amount, Token unit, Expr ingr"
+                "Quantity   : double amount, Token unit, Expr ingr",
+                "Literal    : Object value"
         ));
 
         defineAst(outputDir, "Stmt", Arrays.asList(

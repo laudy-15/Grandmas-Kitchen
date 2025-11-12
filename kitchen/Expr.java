@@ -13,6 +13,7 @@ abstract class Expr {
     R visitRestExpr(Rest expr);
     R visitEmptyExpr(Empty expr);
     R visitQuantityExpr(Quantity expr);
+    R visitLiteralExpr(Literal expr);
   }
   static class Ingredient extends Expr {
     Ingredient(Token tok) {
@@ -120,6 +121,23 @@ abstract class Expr {
     @Override
     public String toString() {
       return "Quantity(" + amount + ", " + unit + ", " + ingr + ")";
+    }
+  }
+  static class Literal extends Expr {
+    Literal(Object value) {
+      this.value = value;
+    }
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+      return visitor.visitLiteralExpr(this);
+    }
+
+    final Object value;
+
+    @Override
+    public String toString() {
+      return "Literal(" + value + ")";
     }
   }
 

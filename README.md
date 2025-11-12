@@ -28,6 +28,7 @@ expr -> <ingredient>
        | <container> is [not] empty
        | <name> [with <expr>+]?  ~~ function call
        | <num> [cups|spoons|..]? [of]? <ingredient>
+       | <Object>
 
  var -> <ingredient> 
        | <container>  
@@ -112,6 +113,7 @@ expr -> <ingredient>
        | <container> is [not] empty
        | <name> [with <expr>+]?  ~~ function call
        | <num> [cups|spoons|..]? [of]? <ingredient>  
+       | <Object>
 
  var -> <ingredient> 
        | <container>       
