@@ -8,10 +8,10 @@ import java.util.List;
 abstract class Stmt {
   interface Visitor<R> {
     R visitDefineStmt(Define stmt);
-    R visitDeclareStmt(Declare stmt);
+    R visitAssignStmt(Assign stmt);
     R visitIfStmt(If stmt);
     R visitWhileStmt(While stmt);
-    R visitAssignStmt(Assign stmt);
+    R visitMixStmt(Mix stmt);
     R visitReturnStmt(Return stmt);
     R visitPrintStmt(Print stmt);
   }
@@ -32,25 +32,23 @@ abstract class Stmt {
       return "Define(" + keyword + ")";
     }
   }
-  static class Declare extends Stmt {
-    Declare(Token keyword, Expr object, Token Identifier) {
-      this.keyword = keyword;
+  static class Assign extends Stmt {
+    Assign(Token cont, Expr object) {
+      this.cont = cont;
       this.object = object;
-      this.Identifier = Identifier;
     }
 
     @Override
     <R> R accept(Visitor<R> visitor) {
-      return visitor.visitDeclareStmt(this);
+      return visitor.visitAssignStmt(this);
     }
 
-    final Token keyword;
+    final Token cont;
     final Expr object;
-    final Token Identifier;
 
     @Override
     public String toString() {
-      return "Declare(" + keyword + ", " + object + ", " + Identifier + ")";
+      return "Assign(" + cont + ", " + object + ")";
     }
   }
   static class If extends Stmt {
@@ -93,23 +91,21 @@ abstract class Stmt {
       return "While(" + condition + ", " + body + ")";
     }
   }
-  static class Assign extends Stmt {
-    Assign(Token cont, Expr object) {
+  static class Mix extends Stmt {
+    Mix(Token cont) {
       this.cont = cont;
-      this.object = object;
     }
 
     @Override
     <R> R accept(Visitor<R> visitor) {
-      return visitor.visitAssignStmt(this);
+      return visitor.visitMixStmt(this);
     }
 
     final Token cont;
-    final Expr object;
 
     @Override
     public String toString() {
-      return "Assign(" + cont + ", " + object + ")";
+      return "Mix(" + cont + ")";
     }
   }
   static class Return extends Stmt {
