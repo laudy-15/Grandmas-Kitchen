@@ -51,11 +51,19 @@ public class Kitchen {
     private static void run(String source) {
         Scanner scanner = new Scanner(source);
         List<Token> tokens = scanner.scanTokens();
+        System.out.println("=== Token Dump ===");
+        // for (Token tok : tokens) {
+        //     System.out.println(tok);
+        // }
         System.out.println(tokens);
 
         Parser parser = new Parser(tokens);
         List<Stmt> statements = parser.parse();
+        System.out.println("=== Stmt Dump ===");
         System.out.println(statements);
+        // for (Stmt stmt : statements) {
+        //     System.out.println(stmt);
+        // }
         // Stop if there was a syntax error.
         if (hadError) return;
 
