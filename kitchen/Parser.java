@@ -98,6 +98,10 @@ public class Parser {
 
         // <name> [with <expr>+]? -- function calls 
 
+        if (check(TokenType.STRING)) {
+            Token tok = advance();
+            return new Expr.Literal(tok.lexeme);
+        }
         return null;
     }
 
@@ -154,7 +158,7 @@ public class Parser {
 
         Stmt thenBranch = statement();
         Stmt elseBranch = null;
-        if (match(ELSE)) {
+        if (match(ELSE)) { //"otherwise"
             elseBranch = statement();
         }
 

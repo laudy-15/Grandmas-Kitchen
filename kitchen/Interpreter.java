@@ -115,6 +115,11 @@ public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
         return expr.amount;
     }
 
+    @Override
+    public Object visitLiteralExpr(Literal expr) {
+        return expr.value;
+    }
+
 
 
     /* STATEMENTS */
@@ -146,8 +151,16 @@ public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
     
     @Override
     public Void visitIfStmt(If stmt) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'visitIfStmt'");
+        Object condition = evaluate(stmt.condition);
+        if (!(condition instanceof Boolean)) {
+            throw new RuntimeError(null, "Condition must be a boolean.");
+        }
+        if ((Boolean)condition) {
+            execute(stmt.thenBranch);
+        } else if (stmt.elseBranch != null) {
+            execute(stmt.elseBranch);
+        }
+        return null;
     }
 
     @Override
