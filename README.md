@@ -18,17 +18,19 @@ stmt -> grab <container>.
       | repeat [stmt]+ until <expr>.
       | plate <expr>.  ~~print statement
       | serve <expr>.  ~~return statement
-
       | mix <containeer>.    ~~~ sum up everything in container into one number in that container
 
 expr -> <ingredient> 
        | <container>
        | top of <container>
        | rest of <container> 
-       | <expr> with <expr> 
+       | <expr> with <expr>    ~~ part of function call
        | <container> is [not] empty
-       | <name> [with <expr>+]?  
+       | <name> [with <expr>+]?  ~~ function call
        | <num> [cups|spoons|..]? [of]? <ingredient>
+
+ var -> <ingredient> 
+       | <container>  
 ```
 
 ## Sample Programs
@@ -100,22 +102,20 @@ stmt -> grab <container>.
       | repeat [stmt]+ until <expr>.
       | plate <expr>.  ~~print statement
       | serve <expr>.  ~~return statement
+      | mix <containeer>.    ~~~ sum up everything in container into one number in that container
 
-expr -> | <var>
+expr -> <ingredient> 
+       | <container>
        | top of <container>
        | rest of <container> 
-       ;;;;| <expr> with <expr> 
+       | <expr> with <expr> ~~ also function call
        | <container> is [not] empty
-       | <name> [with <expr>+]?  
-       | <num> [cups|spoons|..] of <ingredient>   
+       | <name> [with <expr>+]?  ~~ function call
+       | <num> [cups|spoons|..]? [of]? <ingredient>  
 
  var -> <ingredient> 
        | <container>       
 
-
-1. expr with expr
-2. differentiate container and ingredient?
-   - should these be hard coded? or user-defined?
 
 
 code to run the test file:
