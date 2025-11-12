@@ -24,12 +24,14 @@ public class Scanner {
         keywords.put("continue", CONTINUE);
         keywords.put("grab", GRAB);
         keywords.put("add", ADD);
+        keywords.put("mix", MIX);
         keywords.put("pour", POUR);
         keywords.put("top", TOP);
         keywords.put("of", OF);
         keywords.put("rest", REST);
         keywords.put("empty", EMPTY);
         keywords.put("with", WITH);
+        keywords.put("combine", COMBINE);
         keywords.put("not", NOT);
         keywords.put("into", INTO);
         keywords.put("until", UNTIL);

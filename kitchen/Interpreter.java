@@ -2,7 +2,6 @@ package kitchen;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +36,8 @@ public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
         stmt.accept(this);
     }
 
+    /* EXPRESSIONS: */
+
     @Override
     public Object visitIngredientExpr(Ingredient expr) {
         // TODO Auto-generated method stub
@@ -52,18 +53,6 @@ public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
         return vars.get(name);
     }
 
-    @Override
-    public Object visitEmptyExpr(Empty expr) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'visitEmptyExpr'");
-    }
-
-    @Override
-    public Object visitQuantityExpr(Quantity expr) {
-        return expr.amount;
-    }
-
-    
     @Override
     public Object visitTopExpr(Top expr) {
         // return the first thing in the container (which should be an arraylist when looked up)
@@ -102,6 +91,33 @@ public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
         return list;
     }
 
+    @Override
+    public Object visitEmptyExpr(Empty expr) {
+        String name = ((Container)expr.cont).tok.lexeme;
+        if (!vars.containsKey(name)) {
+            throw new RuntimeError(((Container)expr.cont).tok, "No such container '" + name + "'.");
+        }
+        Object value = vars.get(name);
+        if (!(value instanceof ArrayList)) {
+            throw new RuntimeError(((Container)expr.cont).tok, "'" + name + "' is not a container.");
+        }
+        ArrayList<Object> list = (ArrayList<Object>)value;
+        boolean isEmpty = list.isEmpty();
+        if (expr.not) {
+            return !isEmpty;
+        } else {
+            return isEmpty;
+        } 
+    }
+
+    @Override
+    public Object visitQuantityExpr(Quantity expr) {
+        return expr.amount;
+    }
+
+
+
+    /* STATEMENTS */
 
     @Override
     public Void visitDefineStmt(Define stmt) {
@@ -111,24 +127,6 @@ public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
         }
         vars.put(name, new ArrayList<Object>());
         return null;
-    }
-
-    @Override
-    public Void visitDeclareStmt(Declare stmt) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'visitDeclareStmt'");
-    }
-
-    @Override
-    public Void visitIfStmt(If stmt) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'visitIfStmt'");
-    }
-
-    @Override
-    public Void visitWhileStmt(While stmt) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'visitWhileStmt'");
     }
 
     @Override
@@ -145,6 +143,46 @@ public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
         list.add(value);
         return null;
     }
+    
+    @Override
+    public Void visitIfStmt(If stmt) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'visitIfStmt'");
+    }
+
+    @Override
+    public Void visitWhileStmt(While stmt) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'visitWhileStmt'");
+    }
+
+    @Override
+    // Sums up the contents of a container and stores it back in the container
+    public Void visitMixStmt(Mix stmt) {
+        String name = stmt.cont.lexeme; // container name
+        if (!vars.containsKey(name)) {
+            throw new RuntimeError(stmt.cont, "No such container '" + name + "'.");
+        }
+        Object value = vars.get(name); // get the container values (should be an ArrayList)
+        if (!(value instanceof ArrayList)) {
+            throw new RuntimeError(stmt.cont, "'" + name + "' is not a container.");
+        }
+        ArrayList<Object> list = (ArrayList<Object>)value; //cast to arrayList after the check ^
+        if (list.isEmpty()) {
+            throw new RuntimeError(stmt.cont, "'" + name + "' is empty.");
+        }
+        double sum = 0;
+        for (Object obj : list) {
+            if (obj instanceof Double) {
+                sum += (Double)obj;   // sum up the things in the array
+            } else {
+                throw new RuntimeError(stmt.cont, "Cannot mix non-numeric ingredient.");
+            }
+        }
+        list.clear(); //clear the old values
+        list.add(sum); // add the sum of the values back into the container
+        return null;
+    }
 
     @Override
     public Void visitReturnStmt(Return stmt) {
@@ -158,6 +196,9 @@ public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
         System.out.println(stringify(value));
         return null;
     }
+
+
+    /* HELPER METHODS: */
 
     private String stringify(Object object) {
         return object.toString();

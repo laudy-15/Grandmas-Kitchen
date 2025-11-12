@@ -27,12 +27,13 @@ public class Parser {
     }
 
     private Stmt statement() {
-        if (match(RETURN)) return returnStatement();
-        if (match(PRINT)) return printStatement();
-        if (match(GRAB)) return varDeclaration();
-        if (match (ADD) || match(OR) || match(POUR)) return varAssignment();
+        if (match(GRAB)) return varDefinition();
+        if (match (ADD) || match(COMBINE) || match(POUR)) return varAssignment();
         if (match(IF)) return ifStatement();
         if (match(WHILE)) return whileStatement();
+        if (match(MIX)) return mixStatement();
+        if (match(RETURN)) return returnStatement();
+        if (match(PRINT)) return printStatement();
         return expressionStatement();
     }
 
@@ -121,7 +122,7 @@ public class Parser {
 
     private Stmt declaration() {
         try {
-            if (match(VAR)) return varDeclaration();
+            if (match(VAR)) return varDefinition();
             return statement();
         } catch (ParseError error) {
             synchronize();
@@ -129,14 +130,15 @@ public class Parser {
         }
     }
 
-
-    private Stmt varDeclaration() {
+    // Define : Token keyword
+    private Stmt varDefinition() {
         Token name = consume(IDENTIFIER, "Expect container name.");
 
         consume(DOT, "Expect '.' after variable definition.");
         return new Stmt.Define(name);
     }
 
+    // Assign: Token cont, Expr object
     private Stmt varAssignment() {
         Expr initializer = expression();
         consume(INTO, "Expect a variable to declare.");
@@ -145,6 +147,7 @@ public class Parser {
         return new Stmt.Assign(name, initializer);
     }
 
+    // If : Expr condition, Stmt thenBranch
     private Stmt ifStatement() {
         Expr condition = expression();
         consume(THEN, "Expect 'then' after expression.");
@@ -162,6 +165,7 @@ public class Parser {
         return new Stmt.If(condition, thenBranch, elseBranch);
     }
 
+    // While : Expr condition, Stmt body
     private Stmt whileStatement() {
         Stmt body = statement();
         consume(UNTIL, "Expect an 'until' after while-statement body.");
@@ -171,12 +175,21 @@ public class Parser {
         return new Stmt.While(condition, body);
     }
 
+    // Mix : Token cont
+    private Stmt mixStatement() {
+        Token cont = consume(TokenType.IDENTIFIER, "expected a container after 'mix'");
+        consume(DOT, "Expect '.' after mix statement.");
+        return new Stmt.Mix(cont);
+    }
+
+    // Return : Expr value
     private Stmt returnStatement() {
         Expr value = expression();
         consume(DOT, "Expect '.' after value.");
         return new Stmt.Return(value);
     }
 
+    // Print : Expr value
     private Stmt printStatement() {
         Expr value = expression();
         consume(DOT, "Expect '.' after value.");

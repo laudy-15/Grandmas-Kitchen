@@ -25,10 +25,10 @@ public class GenerateAST {
 
         defineAst(outputDir, "Stmt", Arrays.asList(
                 "Define     : Token keyword",
-                "Declare    : Token keyword, Expr object, Token Identifier",
+                "Assign     : Token cont, Expr object",
                 "If         : Expr condition, Stmt thenBranch, Stmt elseBranch",
                 "While      : Expr condition, Stmt body",
-                "Assign     : Token cont, Expr object",
+                "Mix        : Token cont",
                 "Return     : Expr value",
                 "Print      : Expr value"
 
