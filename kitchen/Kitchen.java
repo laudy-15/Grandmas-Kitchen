@@ -59,6 +59,7 @@ public class Kitchen {
 
         Parser parser = new Parser(tokens);
         List<Stmt> statements = parser.parse();
+        System.out.println("Parsed expression: " + statements.toString());
         System.out.println("=== Stmt Dump ===");
         System.out.println(statements);
         // for (Stmt stmt : statements) {
