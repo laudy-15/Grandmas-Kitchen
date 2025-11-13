@@ -165,8 +165,20 @@ public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
 
     @Override
     public Void visitWhileStmt(While stmt) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'visitWhileStmt'");
+        Object condition = evaluate(stmt.condition);
+        if (!(condition instanceof Boolean)) {
+            throw new RuntimeError(null, "Condition must be a boolean.");
+        }
+        while (!(Boolean)condition) {
+            for (Stmt bodyStmt : stmt.body) {
+                execute(bodyStmt);
+            }
+            condition = evaluate(stmt.condition);
+            if (!(condition instanceof Boolean)) {
+                throw new RuntimeError(null, "Condition must be a boolean.");
+            }
+        }
+        return null;
     }
 
     @Override
@@ -196,6 +208,26 @@ public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
         list.add(sum); // add the sum of the values back into the container
         return null;
     }
+
+    @Override
+    // removes the top of the given container
+    public Void visitShakeStmt(Shake stmt) {
+        String name = stmt.cont.lexeme; // container name
+        if (!vars.containsKey(name)) {
+            throw new RuntimeError(stmt.cont, "No such container '" + name + "'.");
+        }
+        Object value = vars.get(name); // get the container values (should be an ArrayList)
+        if (!(value instanceof ArrayList)) {
+            throw new RuntimeError(stmt.cont, "'" + name + "' is not a container.");
+        }
+        ArrayList<Object> list = (ArrayList<Object>)value; //cast to arrayList after the check ^
+        if (list.isEmpty()) {
+            throw new RuntimeError(stmt.cont, "'" + name + "' is empty.");
+        }
+        list.remove(0); // remove the top of the container
+        return null;
+    }
+        
 
     @Override
     public Void visitReturnStmt(Return stmt) {

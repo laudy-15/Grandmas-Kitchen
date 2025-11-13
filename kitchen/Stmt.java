@@ -12,6 +12,7 @@ abstract class Stmt {
     R visitIfStmt(If stmt);
     R visitWhileStmt(While stmt);
     R visitMixStmt(Mix stmt);
+    R visitShakeStmt(Shake stmt);
     R visitReturnStmt(Return stmt);
     R visitPrintStmt(Print stmt);
   }
@@ -73,9 +74,9 @@ abstract class Stmt {
     }
   }
   static class While extends Stmt {
-    While(Expr condition, Stmt body) {
-      this.condition = condition;
+    While(List<Stmt> body, Expr condition) {
       this.body = body;
+      this.condition = condition;
     }
 
     @Override
@@ -83,12 +84,12 @@ abstract class Stmt {
       return visitor.visitWhileStmt(this);
     }
 
+    final List<Stmt> body;
     final Expr condition;
-    final Stmt body;
 
     @Override
     public String toString() {
-      return "While(" + condition + ", " + body + ")";
+      return "While(" + body + ", " + condition + ")";
     }
   }
   static class Mix extends Stmt {
@@ -106,6 +107,23 @@ abstract class Stmt {
     @Override
     public String toString() {
       return "Mix(" + cont + ")";
+    }
+  }
+  static class Shake extends Stmt {
+    Shake(Token cont) {
+      this.cont = cont;
+    }
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+      return visitor.visitShakeStmt(this);
+    }
+
+    final Token cont;
+
+    @Override
+    public String toString() {
+      return "Shake(" + cont + ")";
     }
   }
   static class Return extends Stmt {

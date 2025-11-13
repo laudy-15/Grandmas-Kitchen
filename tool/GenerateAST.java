@@ -28,8 +28,9 @@ public class GenerateAST {
                 "Define     : Token keyword",
                 "Assign     : Token cont, Expr object",
                 "If         : Expr condition, Stmt thenBranch, Stmt elseBranch",
-                "While      : Expr condition, Stmt body",
+                "While      : List<Stmt> body, Expr condition",
                 "Mix        : Token cont",
+                "Shake      : Token cont",
                 "Return     : Expr value",
                 "Print      : Expr value"
 

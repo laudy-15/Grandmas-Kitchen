@@ -25,6 +25,7 @@ public class Scanner {
         keywords.put("grab", GRAB);
         keywords.put("add", ADD);
         keywords.put("mix", MIX);
+        keywords.put("shake", SHAKE);
         keywords.put("pour", POUR);
         keywords.put("top", TOP);
         keywords.put("of", OF);
@@ -48,7 +49,7 @@ public class Scanner {
         keywords.put("true", TRUE);
         keywords.put("var", VAR);
         keywords.put("is", IS); //equality
-        keywords.put("while", WHILE);
+        keywords.put("repeat", WHILE);
         keywords.put("break", BREAK);
 
         // Containers (IDENTIFIER)

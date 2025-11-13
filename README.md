@@ -19,6 +19,7 @@ stmt -> grab <container>.
       | plate <expr>.  ~~print statement
       | serve <expr>.  ~~return statement
       | mix <containeer>.    ~~~ sum up everything in container into one number in that container
+      | shake <container>. ~~removes the top of the container
 
 expr -> <ingredient> 
        | <container>
@@ -104,6 +105,7 @@ stmt -> grab <container>.
       | plate <expr>.  ~~print statement
       | serve <expr>.  ~~return statement
       | mix <containeer>.    ~~~ sum up everything in container into one number in that container
+      | shake <container>. ~~removes the top of the container
 
 expr -> <ingredient> 
        | <container>

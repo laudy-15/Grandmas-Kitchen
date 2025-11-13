@@ -32,6 +32,7 @@ public class Parser {
         if (match(IF)) return ifStatement();
         if (match(WHILE)) return whileStatement();
         if (match(MIX)) return mixStatement();
+        if (match(SHAKE)) return shakeStatement();
         if (match(RETURN)) return returnStatement();
         if (match(PRINT)) return printStatement();
         return expressionStatement();
@@ -171,12 +172,15 @@ public class Parser {
 
     // While : Expr condition, Stmt body
     private Stmt whileStatement() {
-        Stmt body = statement();
+        List<Stmt> body = new ArrayList<>();
+        while (!check(UNTIL)) {
+            body.add(statement());
+        }
         consume(UNTIL, "Expect an 'until' after while-statement body.");
         Expr condition = expression();
         consume(DOT, "Expect '.' after while-statement.");
         
-        return new Stmt.While(condition, body);
+        return new Stmt.While(body, condition);
     }
 
     // Mix : Token cont
@@ -184,6 +188,13 @@ public class Parser {
         Token cont = consume(TokenType.IDENTIFIER, "expected a container after 'mix'");
         consume(DOT, "Expect '.' after mix statement.");
         return new Stmt.Mix(cont);
+    }
+
+    // Shake : Token cont
+    private Stmt shakeStatement() {
+        Token cont = consume(TokenType.IDENTIFIER, "expected a container after 'shake'");
+        consume(DOT, "Expect '.' after shake statement.");
+        return new Stmt.Shake(cont);
     }
 
     // Return : Expr value
