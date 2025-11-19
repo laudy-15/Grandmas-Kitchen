@@ -1,11 +1,18 @@
+~~   use bowl.   <---  something like this to pre-declare containers/ingredients?
+~~   need eggs.
+~~.       if so, processing these would add them to the `vars` Map, mapped to `null` maybe
+~~.   then only allow var names if they are already contained in `vars`
+
 grab bowl.
 plate bowl is empty.
 add 3 eggs into bowl.
 add 4 cups of flour into bowl.
 add 4 tablespoons of salt into bowl.
+plate bowl.
 plate rest of bowl.
 plate bowl is not empty.
 
+plate bowl.
 mix bowl.
 
 plate top of bowl.

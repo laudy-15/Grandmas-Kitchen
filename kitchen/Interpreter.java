@@ -10,6 +10,9 @@ import kitchen.Stmt.*;
 
 public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
     private final Map<String, Object> vars = new HashMap<>();
+        // TODO: questions about pre-defining/checking ingredients & containers
+        //.      are they both treated the same as in being stored here in `vars`
+        
 
     void dump() {
         System.out.println("=== Variable Dump ===");
@@ -87,8 +90,15 @@ public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
             throw new RuntimeError(((Container)expr.cont).tok, "'" + name + "' is empty.");
         }
 
-        list.remove(0);
-        return list;
+        //list.remove(0);
+        // TODO: question: should "rest of X"  actually remove from X or
+        //         should it make a copy of X with the first thing removed
+
+        ArrayList<Object> listCopy = new ArrayList<>();
+        listCopy.addAll(list);
+        listCopy.remove(0);
+
+        return listCopy;
     }
 
     @Override
