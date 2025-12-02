@@ -124,7 +124,9 @@ public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
 
     @Override
     public Object visitCallExpr(Call expr) {
+        // This method is where the error is, but I don't have the brainpower right now to fix it
         System.out.println("HELLOOOOO");
+        System.out.println("Callee object: " + expr.callee);
         Object callee = evaluate(expr.callee);
 
         List<Object> arguments = new ArrayList<>();
@@ -132,7 +134,8 @@ public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
             arguments.add(evaluate(argument));
         }
 
-        if (!(callee instanceof KitchenCallable)) {
+        System.out.println("Callee object: " + callee);
+        if (!(expr.callee instanceof KitchenCallable)) {
             throw new RuntimeError(expr.paren,
                 "Can only call functions and classes.");
         }
@@ -157,6 +160,12 @@ public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
     @Override
     public Object visitLiteralExpr(Literal expr) {
         return expr.value;
+    }
+
+    @Override
+    public Void visitExpressionStmt(Expression stmt) {
+        evaluate(stmt.expression);
+        return null;
     }
 
 
@@ -269,7 +278,6 @@ public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
 
     @Override
     public Void visitRecipeStmt(Recipe stmt) {
-        System.out.println("Is stmt null? " + (stmt == null));
         KitchenFunction function = new KitchenFunction(stmt, environment,
                                             false);
         environment.define(stmt.name.lexeme, function);

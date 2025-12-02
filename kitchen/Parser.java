@@ -106,12 +106,7 @@ public class Parser {
                     } while (match(COMMA));
                 }
                 consume(RIGHT_PAREN, "Expect ')' after arguments.");
-                // System.out.println("Is argument list empty? " + arguments.isEmpty());
-                // System.out.println("is arguments null? " + (arguments == null));
-                // System.out.println("is cont null? " + (cont == null));
-                // System.out.println("is paren null? " + (paren == null));
-                // System.out.println("Function name: " + cont.tok.lexeme);
-                // System.out.println("Number of arguments: " + arguments.size());
+                
                 return new Expr.Call(cont, paren, arguments);
             }
             
@@ -271,7 +266,7 @@ public class Parser {
     private Stmt expressionStatement() {
         Expr expr = expression();
         consume(DOT, "Expect '.' after expression.");
-        return null; //new Stmt.Expression(expr);
+        return new Stmt.Expression(expr);
     }
 
 

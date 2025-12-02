@@ -16,6 +16,7 @@ abstract class Stmt {
     R visitRecipeStmt(Recipe stmt);
     R visitServeStmt(Serve stmt);
     R visitPrintStmt(Print stmt);
+    R visitExpressionStmt(Expression stmt);
   }
   static class Define extends Stmt {
     Define(Token keyword) {
@@ -180,6 +181,23 @@ abstract class Stmt {
     @Override
     public String toString() {
       return "Print(" + value + ")";
+    }
+  }
+  static class Expression extends Stmt {
+    Expression(Expr expression) {
+      this.expression = expression;
+    }
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+      return visitor.visitExpressionStmt(this);
+    }
+
+    final Expr expression;
+
+    @Override
+    public String toString() {
+      return "Expression(" + expression + ")";
     }
   }
 

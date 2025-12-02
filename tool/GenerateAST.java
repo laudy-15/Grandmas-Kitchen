@@ -35,7 +35,8 @@ public class GenerateAST {
                 "Recipe     : Token name, List<Token> params," +
                             " List<Stmt> body",  //function declaration
                 "Serve      : Expr value",   // reuturn statement
-                "Print      : Expr value"
+                "Print      : Expr value",
+                "Expression : Expr expression"
 
         ));
     }
