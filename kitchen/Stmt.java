@@ -13,7 +13,8 @@ abstract class Stmt {
     R visitWhileStmt(While stmt);
     R visitMixStmt(Mix stmt);
     R visitShakeStmt(Shake stmt);
-    R visitReturnStmt(Return stmt);
+    R visitRecipeStmt(Recipe stmt);
+    R visitServeStmt(Serve stmt);
     R visitPrintStmt(Print stmt);
   }
   static class Define extends Stmt {
@@ -126,21 +127,42 @@ abstract class Stmt {
       return "Shake(" + cont + ")";
     }
   }
-  static class Return extends Stmt {
-    Return(Expr value) {
+  static class Recipe extends Stmt {
+    Recipe(Token name, List<Token> params, List<Stmt> body) {
+      this.name = name;
+      this.params = params;
+      this.body = body;
+    }
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+      return visitor.visitRecipeStmt(this);
+    }
+
+    final Token name;
+    final List<Token> params;
+    final List<Stmt> body;
+
+    @Override
+    public String toString() {
+      return "Recipe(" + name + ", " + params + ", " + body + ")";
+    }
+  }
+  static class Serve extends Stmt {
+    Serve(Expr value) {
       this.value = value;
     }
 
     @Override
     <R> R accept(Visitor<R> visitor) {
-      return visitor.visitReturnStmt(this);
+      return visitor.visitServeStmt(this);
     }
 
     final Expr value;
 
     @Override
     public String toString() {
-      return "Return(" + value + ")";
+      return "Serve(" + value + ")";
     }
   }
   static class Print extends Stmt {

@@ -31,7 +31,9 @@ public class GenerateAST {
                 "While      : List<Stmt> body, Expr condition",
                 "Mix        : Token cont",
                 "Shake      : Token cont",
-                "Return     : Expr value",
+                "Recipe     : Token name, List<Token> params," +
+                            " List<Stmt> body",  //function declaration
+                "Serve      : Expr value",   // reuturn statement
                 "Print      : Expr value"
 
         ));

@@ -44,6 +44,7 @@ public class Scanner {
         keywords.put("or", OR);
         keywords.put("plate", PRINT);
         keywords.put("serve", RETURN);
+        keywords.put("using", USING);
         keywords.put("super", SUPER);
         keywords.put("this", THIS);
         keywords.put("true", TRUE);

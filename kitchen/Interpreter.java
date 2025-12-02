@@ -9,6 +9,8 @@ import kitchen.Expr.*;
 import kitchen.Stmt.*;
 
 public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
+    final Environment globals = new Environment();
+    private Environment environment = globals;
     private final Map<String, Object> vars = new HashMap<>();
         // TODO: questions about pre-defining/checking ingredients & containers
         //.      are they both treated the same as in being stored here in `vars`
@@ -237,12 +239,35 @@ public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
         list.remove(0); // remove the top of the container
         return null;
     }
-        
 
     @Override
-    public Void visitReturnStmt(Return stmt) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'visitReturnStmt'");
+    public Void visitRecipeStmt(Recipe stmt) {
+        KitchenFunction function = new KitchenFunction(stmt, environment,
+                                            false);
+        environment.define(stmt.name.lexeme, function);
+        return null;
+    }
+
+    // note: not private
+    void executeBlock(List<Stmt> statements, Environment environment) {
+        Environment previous = this.environment;
+        try {
+            this.environment = environment;
+
+            for (Stmt statement : statements) {
+                execute(statement);
+            }
+        } finally {
+            this.environment = previous;    // restore
+        }
+    }
+
+    @Override
+    public Void visitServeStmt(Stmt.Serve stmt) {
+        Object value = null;
+        if (stmt.value != null) value = evaluate(stmt.value);
+
+        throw new Serve(value);
     }
 
     @Override
@@ -258,5 +283,6 @@ public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
     private String stringify(Object object) {
         return object.toString();
     }
+
 
 }

@@ -10,7 +10,7 @@ Description: Grandma’s Kitchen is a general purpose programming language where
 
 ## Grammar
 ```
-recipe -> recipe for <name> [using <ingredients>+]? . [stmt]+
+recipe -> recipe for <name> [using <ingredients>+]? ( [stmt]+ )
 
 stmt -> grab <container>.
       | [add|combine|pour] <expr> into <container>.
@@ -92,11 +92,11 @@ fib(N) = if n == 0 or 1 return n, else return fib(n-1) + fib(n-2)
 containers  -> pot | bowl | pan | cup | saucer | sheet | ...
 ingredients  -> eggs | flour | sugar | milk | ....
 
-utensils ~~~~ lists
-ingredients ~~~~~ constants
+containers are lists
+ingredients are 'objects'
 
 
-recipe -> recipe for <name> [using <ingredients>+]? . [stmt]+
+recipe -> recipe for <name> [using <ingredients>+]? ( [stmt]+ )
 
 stmt -> grab <container>.
       | [add|combine|pour] <expr> into <container>.

@@ -12,6 +12,8 @@ public class Parser {
     private static class ParseError extends RuntimeException {}
 
     private final List<Token> tokens;
+    private final List<Container> containers = new ArrayList<>();
+    private final List<Ingredient> ingredients = new ArrayList<>();
     private int current = 0;
 
     Parser(List<Token> tokens) {
@@ -119,6 +121,16 @@ public class Parser {
         Token tok = consume(IDENTIFIER, "expected container");
 
         // TODO: check that it's a valid container
+        // for (Expr.Container cont: containers) {
+        //     if (cont.tok.lexeme.equals(tok.lexeme)) {
+        //         System.out.println("Container already exists: " + tok.lexeme);
+        //     } else {
+        //         containers.add(new Expr.Container(tok));
+        //         System.out.println("Containers: " + containers.toString());
+        //         break;
+        //     }
+        // }
+        containers.add(new Expr.Container(tok));
         return new Expr.Container(tok);
     }
 
@@ -197,11 +209,34 @@ public class Parser {
         return new Stmt.Shake(cont);
     }
 
-    // Return : Expr value
+    // Recipe : Token name, List<Token> params, List<Stmt> body
+    // Function Declaration
+    private Stmt recipeStatement() {
+        Token name = consume(TokenType.IDENTIFIER, "expected function name after 'recipe for'");
+        List<Token> params = new ArrayList<>();
+        if (match(USING)) {
+            do {
+                params.add(consume(TokenType.IDENTIFIER, "expected ingredient name as parameter"));
+            } while (match(COMMA));
+        }
+        consume(LEFT_PAREN, "Expect '(' after function declaration header.");
+
+        List<Stmt> body = new ArrayList<>();
+        while (!check(RIGHT_PAREN) && !isAtEnd()) {
+            body.add(declaration());
+        }
+
+        consume(RIGHT_PAREN, "Expect ')' to close the recipe.");
+
+        return new Stmt.Recipe(name, params, body);
+    }
+
+
+    // Serve : Expr value
     private Stmt returnStatement() {
         Expr value = expression();
         consume(DOT, "Expect '.' after value.");
-        return new Stmt.Return(value);
+        return new Stmt.Serve(value);
     }
 
     // Print : Expr value
