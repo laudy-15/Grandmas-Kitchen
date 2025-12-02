@@ -123,6 +123,33 @@ public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
     }
 
     @Override
+    public Object visitCallExpr(Call expr) {
+        System.out.println("HELLOOOOO");
+        Object callee = evaluate(expr.callee);
+
+        List<Object> arguments = new ArrayList<>();
+        for (Expr argument : expr.arguments) { 
+            arguments.add(evaluate(argument));
+        }
+
+        if (!(callee instanceof KitchenCallable)) {
+            throw new RuntimeError(expr.paren,
+                "Can only call functions and classes.");
+        }
+
+        KitchenCallable function = (KitchenCallable)callee;
+        if (arguments.size() != function.arity()) {
+            throw new RuntimeError(expr.paren, "Expected " +
+                    function.arity() + " arguments but got " +
+                    arguments.size() + ".");
+        }
+
+        System.out.println("is arguments null? " + (arguments == null));
+        System.out.println("ARE WE EVEN GETTING HERE???");
+        return function.call(this, arguments);
+    }
+
+    @Override
     public Object visitQuantityExpr(Quantity expr) {
         return expr.amount;
     }
@@ -242,6 +269,7 @@ public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
 
     @Override
     public Void visitRecipeStmt(Recipe stmt) {
+        System.out.println("Is stmt null? " + (stmt == null));
         KitchenFunction function = new KitchenFunction(stmt, environment,
                                             false);
         environment.define(stmt.name.lexeme, function);

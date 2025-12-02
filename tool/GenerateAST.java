@@ -20,6 +20,7 @@ public class GenerateAST {
                 "Top        : Expr cont",
                 "Rest       : Expr cont",
                 "Empty      : Expr cont, boolean not",
+                "Call       : Expr callee, Token paren, List<Expr> arguments",
                 "Quantity   : double amount, Token unit, Expr ingr",
                 "Literal    : Object value"
         ));

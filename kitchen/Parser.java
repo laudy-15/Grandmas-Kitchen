@@ -35,6 +35,7 @@ public class Parser {
         if (match(WHILE)) return whileStatement();
         if (match(MIX)) return mixStatement();
         if (match(SHAKE)) return shakeStatement();
+        if (match(RECIPE)) return recipeStatement();
         if (match(RETURN)) return returnStatement();
         if (match(PRINT)) return printStatement();
         return expressionStatement();
@@ -82,7 +83,7 @@ public class Parser {
 
         // <container>
         if (check(TokenType.IDENTIFIER)) {
-            Container cont = container();
+            Container cont = container(); //this could also be the function name
 
             // <container> is [not] empty
             if (check(TokenType.IS)) {
@@ -95,6 +96,25 @@ public class Parser {
                 consume(EMPTY, "expected 'empty' after container");
                 return new Expr.Empty(cont, not);
             }
+            if (check(TokenType.LEFT_PAREN)) {
+                // function call
+                Token paren = advance(); // consume '('
+                List<Expr> arguments = new ArrayList<>();
+                if (!check(RIGHT_PAREN)) {
+                    do {
+                        arguments.add(expression());
+                    } while (match(COMMA));
+                }
+                consume(RIGHT_PAREN, "Expect ')' after arguments.");
+                // System.out.println("Is argument list empty? " + arguments.isEmpty());
+                // System.out.println("is arguments null? " + (arguments == null));
+                // System.out.println("is cont null? " + (cont == null));
+                // System.out.println("is paren null? " + (paren == null));
+                // System.out.println("Function name: " + cont.tok.lexeme);
+                // System.out.println("Number of arguments: " + arguments.size());
+                return new Expr.Call(cont, paren, arguments);
+            }
+            
 
             return cont; 
         }
@@ -212,6 +232,7 @@ public class Parser {
     // Recipe : Token name, List<Token> params, List<Stmt> body
     // Function Declaration
     private Stmt recipeStatement() {
+        consume(FOR, "expected 'for' after 'recipe'");
         Token name = consume(TokenType.IDENTIFIER, "expected function name after 'recipe for'");
         List<Token> params = new ArrayList<>();
         if (match(USING)) {
@@ -227,6 +248,7 @@ public class Parser {
         }
 
         consume(RIGHT_PAREN, "Expect ')' to close the recipe.");
+        consume(DOT, "Expect '.' after shake statement.");
 
         return new Stmt.Recipe(name, params, body);
     }

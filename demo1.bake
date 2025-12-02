@@ -30,3 +30,9 @@ repeat
   plate top of pyrex.
   shake pyrex.
  until pyrex is empty.
+
+recipe for printy (
+  plate "hello world".
+).
+
+printy().

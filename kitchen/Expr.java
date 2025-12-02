@@ -12,6 +12,7 @@ abstract class Expr {
     R visitTopExpr(Top expr);
     R visitRestExpr(Rest expr);
     R visitEmptyExpr(Empty expr);
+    R visitCallExpr(Call expr);
     R visitQuantityExpr(Quantity expr);
     R visitLiteralExpr(Literal expr);
   }
@@ -100,6 +101,27 @@ abstract class Expr {
     @Override
     public String toString() {
       return "Empty(" + cont + ", " + not + ")";
+    }
+  }
+  static class Call extends Expr {
+    Call(Expr callee, Token paren, List<Expr> arguments) {
+      this.callee = callee;
+      this.paren = paren;
+      this.arguments = arguments;
+    }
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+      return visitor.visitCallExpr(this);
+    }
+
+    final Expr callee;
+    final Token paren;
+    final List<Expr> arguments;
+
+    @Override
+    public String toString() {
+      return "Call(" + callee + ", " + paren + ", " + arguments + ")";
     }
   }
   static class Quantity extends Expr {
