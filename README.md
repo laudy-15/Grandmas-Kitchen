@@ -10,7 +10,7 @@ Description: Grandma’s Kitchen is a general purpose programming language where
 
 ## Grammar
 ```
-recipe -> recipe for <name> [using <ingredients>+]? ( [stmt]+ )
+recipe -> recipe for <name> [using <ingredients>+]? ( [stmt]+ ).
 
 stmt -> grab <container>.
       | [add|combine|pour] <expr> into <container>.
@@ -25,47 +25,92 @@ expr -> <ingredient>
        | <container>
        | top of <container>
        | rest of <container> 
-       | <expr> with <expr>    ~~ part of function call
        | <container> is [not] empty
-       | <name> [with <expr>+]?  ~~ function call
+       | <recipeName>([<expr>]).
        | <num> [cups|spoons|..]? [of]? <ingredient>
        | <Object>
 
- var -> <ingredient> 
-       | <container>  
 ```
 
 ## Sample Programs
+
+### Printing:
 ```
-grab pot.   ~~~~    pot = []
-add eggs to pot.     ~~~~~ pot = cons eggs pot
-combine eggs with pot into bowl.   ~~~~   bowl = cons eggs pot
-pour pot into bowl.        ~~~~ bowl = pot
-
- ... top of pot ...     ~~~~~   first pot
-.... rest of pot ....            ~~~~ rest pot
-
-  bowl is empty  .... ~~~~~    empty? bowl
-  bowl is not empty ....  
-
-if bowl is empty 
-then 
-   add eggs to bowl.
-   pour bowl into plate.
-otherwise
-   combine eggs with bowl into pan.
-and continue.
-
-repeat 
-   add eggs to bowl
-   pour bowl into plate
-until weight of bowl > weight of plate.
-
-
-for each <thing> in the bowl:
-    add <thing> to pot
-
-
+plate "Hello world".
+```
+#### Output:
+```
+Hello world
+```
+___
+### Variable Declaration:
+```
+grab bowl.
+plate bowl is empty.
+add 3 eggs into bowl.
+add 4 cups of flour into bowl.
+add 4 tablespoons of salt into bowl.
+plate bowl.
+```
+#### Output:
+```
+[3, 4, 4]
+```
+___
+### Boolean Statements:
+```
+plate bowl is not empty.
+plate bowl is empty.
+```
+#### Output:
+```
+true
+false
+```
+___
+### If-Statements:
+```
+if bowl is empty then plate "hello". otherwise plate "goodbye". and continue.
+```
+#### Output:
+```
+goodbye
+```
+___
+### Sum:
+```
+mix bowl.
+plate bowl.
+```
+#### Output:
+```
+[11.0]
+```
+___
+### While-Loop:
+```
+grab pyrex.
+add 1 cup of flour into pyrex.
+add 2 eggs into pyrex.
+add 3 tablespoons of oil into pyrex.
+add 4 teaspoons of vanilla into pyrex.
+repeat
+  plate top of pyrex.
+  shake pyrex.
+ until pyrex is empty.
+plate pyrex.
+```
+#### Output:
+```
+1.0
+2.0
+3.0
+4.0
+[]
+```
+___
+### Function to calculate Fibonacci numbers:
+```
 recipe for fib using eggs:
    grab plate.
    if weight of eggs is 0 or weight of eggs is 1 then
@@ -82,45 +127,5 @@ add 3 cups of milk into pot.
 serve fib with pot.
 
 
-
-
 fib(N) = if n == 0 or 1 return n, else return fib(n-1) + fib(n-2)
 ```
-
-## Workspace:
-
-containers  -> pot | bowl | pan | cup | saucer | sheet | ...
-ingredients  -> eggs | flour | sugar | milk | ....
-
-containers are lists
-ingredients are 'objects'
-
-
-recipe -> recipe for <name> [using <ingredients>+]? ( [stmt]+ )
-
-stmt -> grab <container>.
-      | [add|combine|pour] <expr> into <container>.
-      | if <expr> then [stmt]+ [otherwise [stmt]+] and continue.
-      | repeat [stmt]+ until <expr>.
-      | plate <expr>.  ~~print statement
-      | serve <expr>.  ~~return statement
-      | mix <containeer>.    ~~~ sum up everything in container into one number in that container
-      | shake <container>. ~~removes the top of the container
-
-expr -> <ingredient> 
-       | <container>
-       | top of <container>
-       | rest of <container> 
-       | <expr> with <expr> ~~ also function call
-       | <container> is [not] empty
-       | <name> [with <expr>+]?  ~~ function call
-       | <num> [cups|spoons|..]? [of]? <ingredient>  
-       | <Object>
-
- var -> <ingredient> 
-       | <container>       
-
-
-
-code to run the test file:
-  & 'C:\Program Files\Eclipse Adoptium\jdk-17.0.8.7-hotspot\bin\java.exe' '-XX:+ShowCodeDetailsInExceptionMessages' '-cp' 'C:\Users\savan\AppData\Roaming\Code\User\workspaceStorage\8ae14183fc085ce81238a7e752060038\redhat.java\jdt_ws\Grandmas-Kitchen_848ff9ef\bin' 'kitchen.Kitchen'  .\demo1.kit

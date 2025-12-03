@@ -35,4 +35,4 @@ recipe for printy (
   plate "hello world".
 ).
 
-printy().
+~~printy().
