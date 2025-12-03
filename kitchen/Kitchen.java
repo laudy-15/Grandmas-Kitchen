@@ -76,7 +76,7 @@ public class Kitchen {
         // if (hadError) return;
 
         interpreter.interpret(statements);
-        interpreter.dump();
+        interpreter.globals.dump();
     }
 
     // public static void main(String[] args) {

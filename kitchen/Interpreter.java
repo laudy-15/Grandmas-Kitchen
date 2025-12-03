@@ -11,17 +11,12 @@ import kitchen.Stmt.*;
 public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
     final Environment globals = new Environment();
     private Environment environment = globals;
-    private final Map<String, Object> vars = new HashMap<>();
+   /////// private final Map<String, Object> vars = new HashMap<>();
         // TODO: questions about pre-defining/checking ingredients & containers
         //.      are they both treated the same as in being stored here in `vars`
         
 
-    void dump() {
-        System.out.println("=== Variable Dump ===");
-        for (String var : vars.keySet()) {
-            System.out.println(var + " : " + vars.get(var));
-        }
-    }
+    
 
     void interpret(List<Stmt> statements) {
         try {
@@ -52,20 +47,25 @@ public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
     @Override
     public Object visitContainerExpr(Container expr) {
         String name = expr.tok.lexeme;  // either an ingredient or a container
-        if (!vars.containsKey(name)) {
-            vars.put(name, 0);
+
+        if (!environment.contains(name) && !globals.contains(name)) {
+            environment.define(name, 0);
+        } else if (environment.contains(name)) {
+            return environment.getAt(0, name);
+        } else {
+            return globals.getAt(0, name);
         }
-        return vars.get(name);
+        return globals.getAt(0, name);      // shouldn't reach here
     }
 
     @Override
     public Object visitTopExpr(Top expr) {
         // return the first thing in the container (which should be an arraylist when looked up)
         String name = ((Container)expr.cont).tok.lexeme;
-        if (!vars.containsKey(name)) {
+        if (!environment.contains(name)) {
             throw new RuntimeError(((Container)expr.cont).tok, "No such container '" + name + "'.");
         }
-        Object value = vars.get(name);
+        Object value = environment.get(name);
         if (!(value instanceof ArrayList)) {
             throw new RuntimeError(((Container)expr.cont).tok, "'" + name + "' is not a container.");
         }
@@ -80,10 +80,10 @@ public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
     public Object visitRestExpr(Rest expr) {
         // return the rest of the container (which should be an arraylist when looked up)
         String name = ((Container)expr.cont).tok.lexeme;
-        if (!vars.containsKey(name)) {
+        if (!environment.contains(name)) {
             throw new RuntimeError(((Container)expr.cont).tok, "No such container '" + name + "'.");
         }
-        Object value = vars.get(name);
+        Object value = environment.get(name);
         if (!(value instanceof ArrayList)) {
             throw new RuntimeError(((Container)expr.cont).tok, "'" + name + "' is not a container.");
         }
@@ -106,10 +106,10 @@ public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
     @Override
     public Object visitEmptyExpr(Empty expr) {
         String name = ((Container)expr.cont).tok.lexeme;
-        if (!vars.containsKey(name)) {
+        if (!environment.contains(name)) {
             throw new RuntimeError(((Container)expr.cont).tok, "No such container '" + name + "'.");
         }
-        Object value = vars.get(name);
+        Object value = environment.get(name);
         if (!(value instanceof ArrayList)) {
             throw new RuntimeError(((Container)expr.cont).tok, "'" + name + "' is not a container.");
         }
@@ -135,7 +135,7 @@ public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
         }
 
         System.out.println("Callee object: " + callee);
-        if (!(expr.callee instanceof KitchenCallable)) {
+        if (!(callee instanceof KitchenCallable)) {
             throw new RuntimeError(expr.paren,
                 "Can only call functions and classes.");
         }
@@ -175,24 +175,24 @@ public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
     @Override
     public Void visitDefineStmt(Define stmt) {
         String name = stmt.keyword.lexeme;
-        if (vars.containsKey(name)) {
+        if (environment.contains(name)) {
             throw new RuntimeError(stmt.keyword, "You already have a  '" + name + "'.");
         }
-        vars.put(name, new ArrayList<Object>());
+        environment.define(name, new ArrayList<Object>());
         return null;
     }
 
     @Override
     public Void visitAssignStmt(Assign stmt) {
         String name = stmt.cont.lexeme;
-        if (!vars.containsKey(name)) {
+        if (!environment.contains(name)) {
             throw new RuntimeError(stmt.cont, "No such container '" + name + "'.");
         }
         Object value = evaluate(stmt.object);
-        if (!(vars.get(name) instanceof ArrayList)) {
+        if (!(environment.get(name) instanceof ArrayList)) {
             throw new RuntimeError(stmt.cont, "'" + name + "' is not a container.");
         }   
-        ArrayList<Object> list = (ArrayList<Object>)vars.get(name);
+        ArrayList<Object> list = (ArrayList<Object>)environment.get(name);
         list.add(value);
         return null;
     }
@@ -233,10 +233,10 @@ public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
     // Sums up the contents of a container and stores it back in the container
     public Void visitMixStmt(Mix stmt) {
         String name = stmt.cont.lexeme; // container name
-        if (!vars.containsKey(name)) {
+        if (!environment.contains(name)) {
             throw new RuntimeError(stmt.cont, "No such container '" + name + "'.");
         }
-        Object value = vars.get(name); // get the container values (should be an ArrayList)
+        Object value = environment.get(name); // get the container values (should be an ArrayList)
         if (!(value instanceof ArrayList)) {
             throw new RuntimeError(stmt.cont, "'" + name + "' is not a container.");
         }
@@ -261,10 +261,10 @@ public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
     // removes the top of the given container
     public Void visitShakeStmt(Shake stmt) {
         String name = stmt.cont.lexeme; // container name
-        if (!vars.containsKey(name)) {
+        if (!environment.contains(name)) {
             throw new RuntimeError(stmt.cont, "No such container '" + name + "'.");
         }
-        Object value = vars.get(name); // get the container values (should be an ArrayList)
+        Object value = environment.get(name); // get the container values (should be an ArrayList)
         if (!(value instanceof ArrayList)) {
             throw new RuntimeError(stmt.cont, "'" + name + "' is not a container.");
         }
