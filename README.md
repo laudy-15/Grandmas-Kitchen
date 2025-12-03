@@ -18,6 +18,8 @@ stmt -> grab <container>.
       | repeat [stmt]+ until <expr>.
       | plate <expr>.  ~~print statement
       | serve <expr>.  ~~return statement
+      | <expr> with <expr>    ~~ part of function call
+      | <name> [with <expr>+]?  ~~ function call
       | mix <containeer>.    ~~~ sum up everything in container into one number in that container
       | shake <container>. ~~removes the top of the container
 
@@ -125,7 +127,6 @@ recipe for fib using eggs:
 grab pot.
 add 3 cups of milk into pot.
 serve fib with pot.
-
-
-fib(N) = if n == 0 or 1 return n, else return fib(n-1) + fib(n-2)
 ```
+## How to run the Grandma's Kitchen Interpreter
+Run the main method in the Kitchen.java class. The main supports file input and terminal input.
