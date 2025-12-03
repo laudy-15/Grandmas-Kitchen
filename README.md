@@ -54,7 +54,7 @@ plate bowl.
 ```
 #### Output:
 ```
-[3, 4, 4]
+[3.0, 4.0, 4.0]
 ```
 ___
 ### Boolean Statements:
