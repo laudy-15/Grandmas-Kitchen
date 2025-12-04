@@ -5,7 +5,7 @@ CSC 404 BYOL Project - Savannah and Emily
 
 **File Extension:**   .bake 
 
-Description: Grandma’s Kitchen is a general purpose programming language where baking terms are the language. The syntax is inspired by Grandma’s recipe cards, allowing the users to code with a pinch of salt and a cup of humor. Grandma’s Kitchen supports basic control flow (while/for-loops), user-defined functions, and simple data structures. The data structures have unique and applicable names to the kitchen! An array is a “pantry”, and an arraylist is a “mixing bowl”. 
+Description: Grandma’s Kitchen is a general purpose programming language where baking terms are the language. The syntax is inspired by Grandma’s recipe cards, allowing the users to code with a pinch of salt and a cup of humor. Grandma’s Kitchen supports basic control flow (while loops), user-defined functions, and array lists. The variables and lists have unique and applicable names to the kitchen! 
 
 
 ## Grammar
