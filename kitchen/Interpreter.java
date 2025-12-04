@@ -124,9 +124,6 @@ public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
 
     @Override
     public Object visitCallExpr(Call expr) {
-        // This method is where the error is, but I don't have the brainpower right now to fix it
-        System.out.println("HELLOOOOO");
-        System.out.println("Callee object: " + expr.callee);
         Object callee = evaluate(expr.callee);
 
         List<Object> arguments = new ArrayList<>();
@@ -134,7 +131,6 @@ public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
             arguments.add(evaluate(argument));
         }
 
-        System.out.println("Callee object: " + callee);
         if (!(callee instanceof KitchenCallable)) {
             throw new RuntimeError(expr.paren,
                 "Can only call functions and classes.");
@@ -142,13 +138,13 @@ public class Interpreter implements Stmt.Visitor<Void>, Expr.Visitor<Object> {
 
         KitchenCallable function = (KitchenCallable)callee;
         if (arguments.size() != function.arity()) {
+            System.out.println("Size of arguments list: " + arguments.size());
+            System.out.println("arity (num of params collected): " + function.arity());
             throw new RuntimeError(expr.paren, "Expected " +
                     function.arity() + " arguments but got " +
                     arguments.size() + ".");
         }
 
-        System.out.println("is arguments null? " + (arguments == null));
-        System.out.println("ARE WE EVEN GETTING HERE???");
         return function.call(this, arguments);
     }
 

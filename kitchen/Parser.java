@@ -231,9 +231,11 @@ public class Parser {
         Token name = consume(TokenType.IDENTIFIER, "expected function name after 'recipe for'");
         List<Token> params = new ArrayList<>();
         if (match(USING)) {
-            do {
+            params.add(consume(TokenType.IDENTIFIER, "expected ingredient name as parameter"));
+
+            while (match(COMMA)) {
                 params.add(consume(TokenType.IDENTIFIER, "expected ingredient name as parameter"));
-            } while (match(COMMA));
+            }
         }
         consume(LEFT_PAREN, "Expect '(' after function declaration header.");
 

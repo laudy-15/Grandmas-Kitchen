@@ -36,3 +36,10 @@ recipe for printy (
 ).
 
 printy().
+
+recipe for paramTest using fruit, vegetable (
+  plate fruit.
+  plate vegetable.
+).
+
+paramTest("grape", "celery").
